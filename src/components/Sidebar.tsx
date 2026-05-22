@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useLaunchStore } from '../store/launchStore';
 import { useAuthStore } from '../store/authStore';
+import { useBackendStore } from '../store/backendStore';
 import { LAUNCH_STAGES, PHASES } from '../data/phases';
+import SyncStatus from './SyncStatus';
 
 // Full-access navigation
 const NAV_FULL = [
@@ -39,7 +41,8 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
     getPhaseProgress, getSubModuleProgress, getSubModulesByPhase, isSubModuleUnlocked,
   } = useLaunchStore();
 
-  const { getCurrentRole, logout, hasFullAccess } = useAuthStore();
+  const { getCurrentRole, logout, hasFullAccess, signOut } = useAuthStore();
+  const { syncStatus } = useBackendStore();
   const role = getCurrentRole();
   const fullAccess = hasFullAccess();
 
@@ -67,6 +70,9 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             </div>
           </div>
           <span className="text-[10px] text-gold font-bold flex-shrink-0">{displayProgress}%</span>
+        </div>
+        <div className="flex items-center justify-between mt-1.5">
+          <SyncStatus />
         </div>
 
         {/* Role row */}

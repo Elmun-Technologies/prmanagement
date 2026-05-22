@@ -12,7 +12,6 @@ import Gamification from './pages/Gamification';
 import Team from './pages/Team';
 import KPITracker from './pages/KPITracker';
 import FinanceModel from './pages/FinanceModel';
-import RoleSelector from './pages/RoleSelector';
 import RoleHome from './pages/RoleHome';
 import Bonuses from './pages/Bonuses';
 import LaunchDayChecklist from './pages/LaunchDayChecklist';
@@ -20,17 +19,38 @@ import Standup from './pages/Standup';
 import Analytics from './pages/Analytics';
 import Calendar from './pages/CalendarView';
 import GlobalSearch, { useGlobalSearch } from './components/GlobalSearch';
+import SyncStatus from './components/SyncStatus';
 import { useAuthStore } from './store/authStore';
-import { useState } from 'react';
+import { useBackendStore } from './store/backendStore';
+import Login from './pages/Login';
+import { useState, useEffect } from 'react';
 
 function AppShell() {
-  const { isLoggedIn, hasFullAccess } = useAuthStore();
+  const { isLoggedIn, hasFullAccess, initAuth, initialized } = useAuthStore();
+  const { initialize: initBackend } = useBackendStore();
   const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Show role selector if not logged in
+  // Initialize auth + backend on mount
+  useEffect(() => {
+    initAuth().then(() => initBackend());
+  }, []);
+
+  // Show loading splash while auth initializes
+  if (!initialized) {
+    return (
+      <div className="min-h-screen bg-dark-bg flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 rounded-2xl bg-gold flex items-center justify-center font-black text-3xl text-dark-bg mx-auto mb-4 animate-pulse">M</div>
+          <p className="text-gray-500 text-sm">Yuklanmoqda...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login if not logged in
   if (!isLoggedIn()) {
-    return <RoleSelector />;
+    return <Login />;
   }
 
   const fullAccess = hasFullAccess();
@@ -63,10 +83,11 @@ function AppShell() {
             ☰
           </button>
           <span className="font-bold text-white flex-1">MoySklad Zapusk</span>
+          <SyncStatus />
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="text-gray-400 hover:text-white"
+            className="text-gray-400 hover:text-white ml-2"
           >
             🔍
           </button>

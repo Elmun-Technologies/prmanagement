@@ -1,8 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { User, Session } from '@supabase/supabase-js';
 import type { Assignee, UserRole } from '../data/types';
 import { FULL_ACCESS_ROLES } from '../data/types';
+import { supabase } from '../lib/supabase';
+import { auth } from '../lib/api';
 
+// ──────────────────────────────────────────────────────────────────
+// Role definitions (UI config, not stored in DB)
+// ──────────────────────────────────────────────────────────────────
 export const USER_ROLES: UserRole[] = [
   {
     id: 'mentor',
@@ -78,49 +84,144 @@ export const USER_ROLES: UserRole[] = [
   },
 ];
 
+// ──────────────────────────────────────────────────────────────────
+// Store state
+// ──────────────────────────────────────────────────────────────────
 interface AuthState {
+  // Supabase session
+  session: Session | null;
+  supabaseUser: User | null;
+
+  // Role override (for demo mode without Supabase)
   currentUser: Assignee | null;
   loginAt: string | null;
+
+  // Loading states
+  loading: boolean;
+  initialized: boolean;
 }
 
-interface AuthStore extends AuthState {
-  login: (role: Assignee) => void;
-  logout: () => void;
-  isLoggedIn: () => boolean;
+interface AuthActions {
+  // Supabase auth
+  signIn:  (email: string, password: string) => Promise<{ error: string | null }>;
+  signUp:  (email: string, password: string, roleId: Assignee, displayName: string) => Promise<{ error: string | null }>;
+  signOut: () => Promise<void>;
+  initAuth: () => Promise<void>;
+
+  // Demo / role selector mode (fallback when Supabase not configured)
+  login:   (role: Assignee) => void;
+  logout:  () => void;
+
+  // Getters
+  isLoggedIn:    () => boolean;
   hasFullAccess: () => boolean;
   getCurrentRole: () => UserRole | null;
+  getCurrentRoleId: () => Assignee | null;
+  getSupabaseUserId: () => string | null;
 }
+
+type AuthStore = AuthState & AuthActions;
+
+const SUPABASE_CONFIGURED =
+  import.meta.env.VITE_SUPABASE_URL &&
+  import.meta.env.VITE_SUPABASE_URL !== 'https://placeholder.supabase.co';
 
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
+      // ── State ──
+      session: null,
+      supabaseUser: null,
       currentUser: null,
       loginAt: null,
+      loading: false,
+      initialized: false,
 
-      login: (role) =>
-        set({ currentUser: role, loginAt: new Date().toISOString() }),
+      // ── Supabase Auth ──
+      initAuth: async () => {
+        if (!SUPABASE_CONFIGURED) {
+          set({ initialized: true });
+          return;
+        }
+        const { data: { session } } = await auth.getSession();
+        set({ session, supabaseUser: session?.user ?? null, initialized: true });
 
-      logout: () =>
-        set({ currentUser: null, loginAt: null }),
+        // Listen for auth state changes
+        supabase.auth.onAuthStateChange((_event, session) => {
+          set({ session, supabaseUser: session?.user ?? null });
+        });
+      },
 
-      isLoggedIn: () => get().currentUser !== null,
+      signIn: async (email, password) => {
+        set({ loading: true });
+        const { data, error } = await auth.signIn(email, password);
+        if (error) {
+          set({ loading: false });
+          return { error: error.message };
+        }
+        set({ session: data.session, supabaseUser: data.user, loading: false });
+        return { error: null };
+      },
+
+      signUp: async (email, password, roleId, displayName) => {
+        set({ loading: true });
+        const { data, error } = await auth.signUp(email, password, roleId, displayName);
+        if (error) {
+          set({ loading: false });
+          return { error: error.message };
+        }
+        set({ session: data.session, supabaseUser: data.user, loading: false });
+        return { error: null };
+      },
+
+      signOut: async () => {
+        if (SUPABASE_CONFIGURED) await auth.signOut();
+        set({ session: null, supabaseUser: null, currentUser: null, loginAt: null });
+      },
+
+      // ── Demo / Role Selector (fallback) ──
+      login: (role) => set({ currentUser: role, loginAt: new Date().toISOString() }),
+      logout: () => {
+        get().signOut();
+      },
+
+      // ── Getters ──
+      isLoggedIn: () => {
+        const s = get();
+        if (SUPABASE_CONFIGURED) return s.supabaseUser !== null;
+        return s.currentUser !== null;
+      },
 
       hasFullAccess: () => {
-        const user = get().currentUser;
-        return user !== null && FULL_ACCESS_ROLES.includes(user);
+        const roleId = get().getCurrentRoleId();
+        return roleId !== null && FULL_ACCESS_ROLES.includes(roleId);
+      },
+
+      getCurrentRoleId: (): Assignee | null => {
+        const s = get();
+        // If Supabase is configured, get role from user metadata
+        if (SUPABASE_CONFIGURED && s.supabaseUser) {
+          const meta = s.supabaseUser.user_metadata;
+          return (meta?.role_id as Assignee) || 'jamoa';
+        }
+        return s.currentUser;
       },
 
       getCurrentRole: () => {
-        const user = get().currentUser;
-        if (!user) return null;
-        return USER_ROLES.find((r) => r.id === user) || null;
+        const roleId = get().getCurrentRoleId();
+        if (!roleId) return null;
+        return USER_ROLES.find((r) => r.id === roleId) || null;
+      },
+
+      getSupabaseUserId: () => {
+        return get().supabaseUser?.id || null;
       },
     }),
     {
-      name: 'moysklad-auth',
+      name: 'moysklad-auth-v2',
       partialize: (state) => ({
         currentUser: state.currentUser,
-        loginAt: state.loginAt,
+        loginAt:     state.loginAt,
       }),
     }
   )
