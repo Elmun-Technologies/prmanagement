@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuthStore, USER_ROLES } from '../store/authStore';
 import type { Assignee } from '../data/types';
 
-const SUPABASE_CONFIGURED =
-  import.meta.env.VITE_SUPABASE_URL &&
-  import.meta.env.VITE_SUPABASE_URL !== 'https://placeholder.supabase.co';
+import { SUPABASE_CONFIGURED } from '../lib/supabase';
 
 // ─── Demo mode (Supabase not yet configured) ────────────────────────────────
 function DemoLogin() {

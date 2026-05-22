@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import type { User, Session } from '@supabase/supabase-js';
 import type { Assignee, UserRole } from '../data/types';
 import { FULL_ACCESS_ROLES } from '../data/types';
-import { supabase } from '../lib/supabase';
+import { supabase, SUPABASE_CONFIGURED } from '../lib/supabase';
 import { auth } from '../lib/api';
 
 // ──────────────────────────────────────────────────────────────────
@@ -122,9 +122,6 @@ interface AuthActions {
 
 type AuthStore = AuthState & AuthActions;
 
-const SUPABASE_CONFIGURED =
-  import.meta.env.VITE_SUPABASE_URL &&
-  import.meta.env.VITE_SUPABASE_URL !== 'https://placeholder.supabase.co';
 
 export const useAuthStore = create<AuthStore>()(
   persist(

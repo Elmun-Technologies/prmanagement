@@ -1,28 +1,46 @@
 import { createClient } from '@supabase/supabase-js';
 
 // ──────────────────────────────────────────────────────────────────
-// Supabase client — reads from Vite env variables
-// Set these in .env.local (local dev) or Netlify env vars (production)
+// Supabase client — env vars injected at build time by build.sh
+// Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local
 // ──────────────────────────────────────────────────────────────────
-const supabaseUrl  = import.meta.env.VITE_SUPABASE_URL  as string;
-const supabaseAnon = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+function getEnv(key: string): string {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const env = (import.meta as any).env;
+    return env?.[key] || '';
+  } catch {
+    return '';
+  }
+}
 
-if (!supabaseUrl || !supabaseAnon) {
-  console.warn(
-    '[Supabase] VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY is missing.\n' +
-    'Copy .env.example to .env.local and fill in your Supabase project credentials.'
+const supabaseUrl  = getEnv('VITE_SUPABASE_URL');
+const supabaseAnon = getEnv('VITE_SUPABASE_ANON_KEY');
+
+export const SUPABASE_CONFIGURED = Boolean(
+  supabaseUrl && supabaseUrl !== 'https://placeholder.supabase.co' && supabaseUrl.includes('supabase.co')
+);
+
+if (!SUPABASE_CONFIGURED) {
+  console.info(
+    '[MoySklad] Demo rejim — Supabase sozlanmagan.\n' +
+    '.env.local faylini yarating va VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY qo\'shing.'
   );
 }
 
-export const supabase = createClient(supabaseUrl || 'https://placeholder.supabase.co', supabaseAnon || 'placeholder', {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-  },
-  realtime: {
-    params: { eventsPerSecond: 10 },
-  },
-});
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseAnon || 'placeholder-anon-key',
+  {
+    auth: {
+      persistSession: SUPABASE_CONFIGURED,
+      autoRefreshToken: SUPABASE_CONFIGURED,
+    },
+    realtime: {
+      params: { eventsPerSecond: 10 },
+    },
+  }
+);
 
 // ──────────────────────────────────────────────────────────────────
 // Database types (matches schema.sql)

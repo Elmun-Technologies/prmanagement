@@ -48,7 +48,7 @@ export default function DailyTodo() {
   // Human-readable day label
   function dayLabel(day: number): string {
     if (day === 0) return 'Seminar kuni';
-    if (day < 0)  return `${Math.abs(day)} kun oldin`;
+    if (day < 0)  return `${Math.abs(day)} kun qoldi`;
     return `${day} kun keyin`;
   }
 
@@ -110,7 +110,7 @@ export default function DailyTodo() {
                         : 'bg-dark-surface text-gray-300 border border-dark-border hover:border-gold/40 hover:text-gold'
                     }`}
                   >
-                    {Math.abs(day)} kun oldin
+                    {Math.abs(day)} kun qoldi
                     {allDone && ' ✓'}
                   </button>
                 );

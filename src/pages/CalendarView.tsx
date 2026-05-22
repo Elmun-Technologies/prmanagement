@@ -113,7 +113,7 @@ export default function CalendarView() {
             onClick={() => setSelectedDay(currentDay)}
             className="text-xs btn-gold py-1.5 px-3"
           >
-            📅 {currentDay === 0 ? 'Seminar kuni' : currentDay < 0 ? `${Math.abs(currentDay)} kun oldin` : `${currentDay} kun keyin`}
+            📅 {currentDay === 0 ? 'Seminar kuni' : currentDay < 0 ? `${Math.abs(currentDay)} kun qoldi` : `${currentDay} kun keyin`}
           </button>
         </div>
       </div>

@@ -8,11 +8,8 @@
 import { create } from 'zustand';
 import { tasks as tasksApi, kpis as kpisApi, bonuses as bonusesApi, announcements as announcementsApi, userXP } from '../lib/api';
 import type { DbAnnouncement } from '../lib/supabase';
+import { SUPABASE_CONFIGURED } from '../lib/supabase';
 import { useAuthStore } from './authStore';
-
-const SUPABASE_CONFIGURED =
-  import.meta.env.VITE_SUPABASE_URL &&
-  import.meta.env.VITE_SUPABASE_URL !== 'https://placeholder.supabase.co';
 
 export type SyncStatus = 'idle' | 'syncing' | 'synced' | 'error' | 'offline';
 
