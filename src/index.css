@@ -1,0 +1,77 @@
+/* Asosiy stillar — Tailwind CDN index.html da */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+/* Komponent klasslari (CDN da yo'q bo'lganlar) */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  width: 100%;
+  transition: all 0.15s;
+}
+.nav-link.active {
+  background: rgba(200, 169, 110, 0.1);
+  color: #c8a96e;
+  border: 1px solid rgba(200, 169, 110, 0.2);
+}
+.nav-link:not(.active) {
+  color: #9ca3af;
+}
+.nav-link:not(.active):hover {
+  background: #22224a;
+  color: #fff;
+}
+.glass-card {
+  background: #13132a;
+  border: 1px solid #2a2a4a;
+  border-radius: 1rem;
+}
+.card {
+  background: #13132a;
+  border: 1px solid #2a2a4a;
+  border-radius: 1rem;
+  padding: 1.25rem;
+}
+.btn-gold {
+  background: #c8a96e;
+  color: #0d0d1a;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+}
+.btn-gold:hover {
+  background: #d4b87a;
+}
+.btn-ghost {
+  background: #22224a;
+  color: #d1d5db;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+}
+.btn-outline {
+  border: 1px solid rgba(200, 169, 110, 0.3);
+  color: #c8a96e;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-outline:hover {
+  background: rgba(200, 169, 110, 0.1);
+}
