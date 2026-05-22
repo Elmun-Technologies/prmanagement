@@ -11,9 +11,11 @@ import {
   RACI_MATRIX,
   RACI_LEGEND,
 } from '../data/teamManagement';
-import type { Assignee } from '../data/types';
+import type { Assignee, CustomMember, MemberContact } from '../data/types';
+import { USER_ROLES } from '../store/authStore';
 
 const TABS = [
+  { id: 'members', label: 'A\'zolar', icon: '👥' },
   { id: 'overview', label: 'Ko\'rinish', icon: '📊' },
   { id: 'management', label: 'Management', icon: '🏢' },
   { id: 'roles', label: 'Rollar', icon: '👤' },
@@ -22,6 +24,229 @@ const TABS = [
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
+
+const EMOJI_LIST = ['👤','👨‍💻','👩‍💻','🎨','🎬','📱','💼','🎯','📊','🤝','⚡','🚀','📞','✍️','🖥️','📷','🎙️','🔧'];
+
+interface AddMemberForm {
+  name: string;
+  roleLabel: string;
+  emoji: string;
+  phone: string;
+  telegram: string;
+  note: string;
+}
+
+function AddMemberModal({
+  onClose,
+  onSave,
+  initial,
+}: {
+  onClose: () => void;
+  onSave: (data: Omit<CustomMember, 'id' | 'addedAt'>) => void;
+  initial?: Partial<AddMemberForm>;
+}) {
+  const [form, setForm] = useState<AddMemberForm>({
+    name: initial?.name || '',
+    roleLabel: initial?.roleLabel || '',
+    emoji: initial?.emoji || '👤',
+    phone: initial?.phone || '',
+    telegram: initial?.telegram || '',
+    note: initial?.note || '',
+  });
+
+  const valid = form.name.trim().length > 0 && form.roleLabel.trim().length > 0;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
+      <div className="bg-dark-card border border-dark-border rounded-2xl w-full max-w-md shadow-2xl">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-dark-border">
+          <h2 className="font-bold text-white">{initial?.name ? 'A\'zoni tahrirlash' : 'Yangi a\'zo qo\'shish'}</h2>
+          <button type="button" onClick={onClose} className="text-gray-500 hover:text-white text-xl">×</button>
+        </div>
+
+        <div className="p-5 space-y-4">
+          {/* Emoji picker */}
+          <div>
+            <label className="text-xs text-gray-500 font-medium block mb-1.5">Emoji / Avatar</label>
+            <div className="flex flex-wrap gap-2">
+              {EMOJI_LIST.map((e) => (
+                <button
+                  key={e}
+                  type="button"
+                  onClick={() => setForm({ ...form, emoji: e })}
+                  className={`w-9 h-9 rounded-xl text-lg flex items-center justify-center transition-all ${
+                    form.emoji === e
+                      ? 'bg-gold/20 border-2 border-gold scale-110'
+                      : 'bg-dark-surface border border-dark-border hover:border-dark-hover'
+                  }`}
+                >
+                  {e}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Name */}
+          <div>
+            <label className="text-xs text-gray-500 font-medium block mb-1">Ism *</label>
+            <input
+              type="text"
+              placeholder="Masalan: Jahongir Yusupov"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              className="w-full bg-dark-surface border border-dark-border rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-gold/50"
+            />
+          </div>
+
+          {/* Role */}
+          <div>
+            <label className="text-xs text-gray-500 font-medium block mb-1">Lavozim / Rol *</label>
+            <input
+              type="text"
+              placeholder="Masalan: Content Creator, SMM Menejeri"
+              value={form.roleLabel}
+              onChange={(e) => setForm({ ...form, roleLabel: e.target.value })}
+              className="w-full bg-dark-surface border border-dark-border rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-gold/50"
+            />
+          </div>
+
+          {/* Phone & Telegram */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs text-gray-500 font-medium block mb-1">Telefon</label>
+              <input
+                type="tel"
+                placeholder="+998 90 000 00 00"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                className="w-full bg-dark-surface border border-dark-border rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-gold/50"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-gray-500 font-medium block mb-1">Telegram</label>
+              <input
+                type="text"
+                placeholder="@username"
+                value={form.telegram}
+                onChange={(e) => setForm({ ...form, telegram: e.target.value })}
+                className="w-full bg-dark-surface border border-dark-border rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-gold/50"
+              />
+            </div>
+          </div>
+
+          {/* Note */}
+          <div>
+            <label className="text-xs text-gray-500 font-medium block mb-1">Izoh (ixtiyoriy)</label>
+            <input
+              type="text"
+              placeholder="Qo'shimcha ma'lumot..."
+              value={form.note}
+              onChange={(e) => setForm({ ...form, note: e.target.value })}
+              className="w-full bg-dark-surface border border-dark-border rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-gold/50"
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-3 px-5 pb-5">
+          <button
+            type="button"
+            onClick={() => onSave(form)}
+            disabled={!valid}
+            className="btn-gold flex-1 py-2.5 font-bold disabled:opacity-40"
+          >
+            {initial?.name ? '✓ Saqlash' : '+ Qo\'shish'}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2.5 rounded-xl border border-dark-border text-gray-400 hover:text-white transition-colors text-sm"
+          >
+            Bekor
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EditContactModal({
+  roleId,
+  roleName,
+  emoji,
+  current,
+  onClose,
+  onSave,
+}: {
+  roleId: string;
+  roleName: string;
+  emoji: string;
+  current: MemberContact;
+  onClose: () => void;
+  onSave: (contact: MemberContact) => void;
+}) {
+  const [form, setForm] = useState<MemberContact>(current);
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
+      <div className="bg-dark-card border border-dark-border rounded-2xl w-full max-w-sm shadow-2xl">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-dark-border">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">{emoji}</span>
+            <h2 className="font-bold text-white">{roleName} — kontakt</h2>
+          </div>
+          <button type="button" onClick={onClose} className="text-gray-500 hover:text-white text-xl">×</button>
+        </div>
+        <div className="p-5 space-y-3">
+          <div>
+            <label className="text-xs text-gray-500 font-medium block mb-1">Haqiqiy ism</label>
+            <input
+              type="text"
+              placeholder="Masalan: Hamid Karimov"
+              value={form.realName}
+              onChange={(e) => setForm({ ...form, realName: e.target.value })}
+              className="w-full bg-dark-surface border border-dark-border rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-gold/50"
+            />
+          </div>
+          <div>
+            <label className="text-xs text-gray-500 font-medium block mb-1">Telefon</label>
+            <input
+              type="tel"
+              placeholder="+998 90 000 00 00"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              className="w-full bg-dark-surface border border-dark-border rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-gold/50"
+            />
+          </div>
+          <div>
+            <label className="text-xs text-gray-500 font-medium block mb-1">Telegram</label>
+            <input
+              type="text"
+              placeholder="@username"
+              value={form.telegram}
+              onChange={(e) => setForm({ ...form, telegram: e.target.value })}
+              className="w-full bg-dark-surface border border-dark-border rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-gold/50"
+            />
+          </div>
+        </div>
+        <div className="flex gap-3 px-5 pb-5">
+          <button
+            type="button"
+            onClick={() => onSave(form)}
+            className="btn-gold flex-1 py-2.5 font-bold"
+          >
+            ✓ Saqlash
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2.5 rounded-xl border border-dark-border text-gray-400 hover:text-white transition-colors text-sm"
+          >
+            Bekor
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const MEMBER_COLORS: Record<Assignee, { bg: string; text: string; border: string; glow: string }> = {
   mentor:     { bg: 'from-blue-600 to-blue-800', text: 'text-blue-400', border: 'border-blue-500/30', glow: 'shadow-blue-500/20' },
@@ -53,10 +278,18 @@ function RoleDetailSection({ title, children }: { title: string; children: React
 }
 
 export default function Team() {
-  const { team, tasks, phases } = useLaunchStore();
-  const [tab, setTab] = useState<TabId>('overview');
+  const {
+    team, tasks, phases,
+    customMembers, memberContacts,
+    addCustomMember, updateCustomMember, removeCustomMember, setMemberContact,
+  } = useLaunchStore();
+
+  const [tab, setTab] = useState<TabId>('members');
   const [expandedRole, setExpandedRole] = useState<Assignee | null>('mentor');
   const [taskFilter, setTaskFilter] = useState<Assignee | 'all'>('all');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [editingCustom, setEditingCustom] = useState<CustomMember | null>(null);
+  const [editingContactRole, setEditingContactRole] = useState<string | null>(null);
 
   const maxXP = Math.max(...team.map((m) => m.xp), 1);
 
@@ -103,13 +336,22 @@ export default function Team() {
         <div>
           <h1 className="text-2xl font-bold text-white">Jamoa & Management</h1>
           <p className="text-gray-400 text-sm mt-1">
-            5 a'zo · {totalDone}/{totalTasks} ish bajarildi · Eng yaxshi:{' '}
+            {team.length + customMembers.length} a'zo · {totalDone}/{totalTasks} ish bajarildi · Eng yaxshi:{' '}
             <span className="text-gold font-semibold">{topPerformer?.name}</span> (⚡{topPerformer?.xp} XP)
           </p>
         </div>
-        <Link to="/daily" className="btn-gold text-sm">
-          Bugungi ishlar →
-        </Link>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => { setTab('members'); setShowAddModal(true); }}
+            className="btn-gold text-sm"
+          >
+            + A'zo qo'shish
+          </button>
+          <Link to="/daily" className="px-4 py-2 rounded-xl border border-dark-border text-gray-300 hover:text-white text-sm transition-colors">
+            Bugungi ishlar →
+          </Link>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -128,6 +370,149 @@ export default function Team() {
           </button>
         ))}
       </div>
+
+      {/* MEMBERS */}
+      {tab === 'members' && (
+        <div className="space-y-5">
+          {/* Role-based members (predefined) */}
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-3">
+              Rol bo'yicha a'zolar ({team.length} ta)
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {USER_ROLES.filter((r) => r.id !== 'jamoa').map((role) => {
+                const contact = memberContacts[role.id];
+                const memberTasks = tasks.filter((t) => t.assignee === role.id);
+                const done = memberTasks.filter((t) => t.status === 'done').length;
+                const isEditing = editingContactRole === role.id;
+
+                return (
+                  <div key={role.id} className={`bg-dark-card border rounded-xl p-4 ${
+                    role.fullAccess ? 'border-gold/30' : 'border-dark-border'
+                  }`}>
+                    <div className="flex items-start gap-3">
+                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0 border ${role.color}`}>
+                        {role.emoji}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <p className="font-bold text-white text-sm leading-tight">
+                              {contact?.realName || role.name}
+                            </p>
+                            {contact?.realName && (
+                              <p className="text-xs text-gray-600">{role.name}</p>
+                            )}
+                            <p className="text-xs text-gray-500 mt-0.5">{role.title}</p>
+                          </div>
+                          {role.fullAccess && (
+                            <span className="text-[10px] bg-gold/20 text-gold border border-gold/30 px-1.5 py-0.5 rounded-full flex-shrink-0">
+                              To'liq kirish
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Contact info */}
+                        <div className="mt-2 space-y-0.5">
+                          {contact?.phone ? (
+                            <p className="text-xs text-gray-400">📞 {contact.phone}</p>
+                          ) : (
+                            <p className="text-xs text-gray-700">📞 Tel kiritilmagan</p>
+                          )}
+                          {contact?.telegram ? (
+                            <p className="text-xs text-gray-400">✈️ {contact.telegram}</p>
+                          ) : (
+                            <p className="text-xs text-gray-700">✈️ Telegram kiritilmagan</p>
+                          )}
+                        </div>
+
+                        {/* Task count */}
+                        <div className="flex items-center justify-between mt-2">
+                          <p className="text-xs text-gray-600">{done}/{memberTasks.length} task</p>
+                          <button
+                            type="button"
+                            onClick={() => setEditingContactRole(isEditing ? null : role.id)}
+                            className="text-xs text-gold hover:text-gold/80 font-medium transition-colors"
+                          >
+                            ✏️ Kontakt
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Custom members */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">
+                Qo'shimcha a'zolar ({customMembers.length} ta)
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowAddModal(true)}
+                className="text-xs text-gold hover:text-gold/80 font-medium border border-gold/30 px-3 py-1 rounded-lg transition-colors"
+              >
+                + Qo'shish
+              </button>
+            </div>
+
+            {customMembers.length === 0 ? (
+              <div className="border border-dashed border-dark-border rounded-xl p-6 text-center">
+                <p className="text-3xl mb-2">👥</p>
+                <p className="text-gray-500 text-sm">Hali qo'shimcha a'zo yo'q</p>
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(true)}
+                  className="mt-3 text-xs text-gold border border-gold/30 px-4 py-1.5 rounded-lg hover:bg-gold/10 transition-colors"
+                >
+                  + Birinchi a'zoni qo'shing
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {customMembers.map((m) => (
+                  <div key={m.id} className="bg-dark-card border border-dark-border rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-11 h-11 rounded-xl bg-dark-surface border border-dark-border flex items-center justify-center text-xl flex-shrink-0">
+                        {m.emoji}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-white text-sm">{m.name}</p>
+                        <p className="text-xs text-gray-400">{m.roleLabel}</p>
+                        <div className="mt-1.5 space-y-0.5">
+                          {m.phone && <p className="text-xs text-gray-500">📞 {m.phone}</p>}
+                          {m.telegram && <p className="text-xs text-gray-500">✈️ {m.telegram}</p>}
+                          {m.note && <p className="text-xs text-gray-600 italic mt-1">{m.note}</p>}
+                        </div>
+                        <div className="flex gap-2 mt-2">
+                          <button
+                            type="button"
+                            onClick={() => setEditingCustom(m)}
+                            className="text-[10px] text-gold hover:text-gold/80 transition-colors"
+                          >
+                            ✏️ Tahrirlash
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => removeCustomMember(m.id)}
+                            className="text-[10px] text-gray-600 hover:text-red-400 transition-colors"
+                          >
+                            🗑️ O'chirish
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* OVERVIEW */}
       {tab === 'overview' && (
@@ -548,6 +933,42 @@ export default function Team() {
             );
           })}
         </div>
+      )}
+
+      {/* Modals */}
+      {showAddModal && (
+        <AddMemberModal
+          onClose={() => setShowAddModal(false)}
+          onSave={(data) => {
+            addCustomMember(data);
+            setShowAddModal(false);
+          }}
+        />
+      )}
+
+      {editingCustom && (
+        <AddMemberModal
+          initial={editingCustom}
+          onClose={() => setEditingCustom(null)}
+          onSave={(data) => {
+            updateCustomMember(editingCustom.id, data);
+            setEditingCustom(null);
+          }}
+        />
+      )}
+
+      {editingContactRole && (
+        <EditContactModal
+          roleId={editingContactRole}
+          roleName={USER_ROLES.find((r) => r.id === editingContactRole)?.name || editingContactRole}
+          emoji={USER_ROLES.find((r) => r.id === editingContactRole)?.emoji || '👤'}
+          current={memberContacts[editingContactRole] || { realName: '', phone: '', telegram: '' }}
+          onClose={() => setEditingContactRole(null)}
+          onSave={(contact) => {
+            setMemberContact(editingContactRole, contact);
+            setEditingContactRole(null);
+          }}
+        />
       )}
     </div>
   );

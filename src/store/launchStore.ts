@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Task, TeamMember, Badge, KPI, LaunchState, LaunchStage, TaskResource } from '../data/types';
+import type { Task, TeamMember, Badge, KPI, LaunchState, LaunchStage, TaskResource, CustomMember, MemberContact } from '../data/types';
 import {
   PHASES,
   LAUNCH_STAGES,
@@ -23,6 +23,10 @@ interface LaunchStore extends LaunchState {
   taskResourceLinks: Record<string, TaskResource[]>;
   // taskId -> completed work URL (jamoa a'zolari joylashgan natijalar)
   taskResultLinks: Record<string, string>;
+  // Qo'shimcha jamoa a'zolari (tasksiz)
+  customMembers: CustomMember[];
+  // Rol -> real kontakt ma'lumot
+  memberContacts: Record<string, MemberContact>;
 
   // Actions
   completeTask: (taskId: string, assignee?: string) => void;
@@ -39,6 +43,10 @@ interface LaunchStore extends LaunchState {
   removeTaskResource: (taskId: string, index: number) => void;
   setTaskResultLink: (taskId: string, url: string) => void;
   clearTaskResultLink: (taskId: string) => void;
+  addCustomMember: (member: Omit<CustomMember, 'id' | 'addedAt'>) => void;
+  updateCustomMember: (id: string, updates: Partial<Omit<CustomMember, 'id' | 'addedAt'>>) => void;
+  removeCustomMember: (id: string) => void;
+  setMemberContact: (roleId: string, contact: MemberContact) => void;
 
   // Computed helpers
   getPhaseProgress: (phaseId: number) => number;
@@ -75,6 +83,8 @@ const INITIAL_STATE: LaunchState = {
 
 const INITIAL_RESOURCE_LINKS: Record<string, TaskResource[]> = {};
 const INITIAL_RESULT_LINKS: Record<string, string> = {};
+const INITIAL_CUSTOM_MEMBERS: CustomMember[] = [];
+const INITIAL_MEMBER_CONTACTS: Record<string, MemberContact> = {};
 
 function checkAndAwardBadges(
   badges: Badge[],
@@ -148,6 +158,8 @@ export const useLaunchStore = create<LaunchStore>()(
       xpPopups: [],
       taskResourceLinks: INITIAL_RESOURCE_LINKS,
       taskResultLinks: INITIAL_RESULT_LINKS,
+      customMembers: INITIAL_CUSTOM_MEMBERS,
+      memberContacts: INITIAL_MEMBER_CONTACTS,
 
       completeTask: (taskId, assigneeOverride) => {
         const state = get();
@@ -250,7 +262,14 @@ export const useLaunchStore = create<LaunchStore>()(
         }));
       },
 
-      resetAll: () => set({ ...INITIAL_STATE, xpPopups: [], taskResourceLinks: {}, taskResultLinks: {} }),
+      resetAll: () => set({
+        ...INITIAL_STATE,
+        xpPopups: [],
+        taskResourceLinks: {},
+        taskResultLinks: {},
+        customMembers: [],
+        memberContacts: {},
+      }),
 
       setTaskResources: (taskId, resources) =>
         set((state) => ({
@@ -283,6 +302,35 @@ export const useLaunchStore = create<LaunchStore>()(
           const { [taskId]: _, ...rest } = state.taskResultLinks;
           return { taskResultLinks: rest };
         }),
+
+      addCustomMember: (member) =>
+        set((state) => ({
+          customMembers: [
+            ...state.customMembers,
+            {
+              ...member,
+              id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+              addedAt: new Date().toISOString(),
+            },
+          ],
+        })),
+
+      updateCustomMember: (id, updates) =>
+        set((state) => ({
+          customMembers: state.customMembers.map((m) =>
+            m.id === id ? { ...m, ...updates } : m
+          ),
+        })),
+
+      removeCustomMember: (id) =>
+        set((state) => ({
+          customMembers: state.customMembers.filter((m) => m.id !== id),
+        })),
+
+      setMemberContact: (roleId, contact) =>
+        set((state) => ({
+          memberContacts: { ...state.memberContacts, [roleId]: contact },
+        })),
 
       getPhaseProgress: (phaseId) => {
         const tasks = get().tasks.filter((t) => t.phaseId === phaseId);
@@ -384,6 +432,8 @@ export const useLaunchStore = create<LaunchStore>()(
         lastActiveDate: state.lastActiveDate,
         taskResourceLinks: state.taskResourceLinks,
         taskResultLinks: state.taskResultLinks,
+        customMembers: state.customMembers,
+        memberContacts: state.memberContacts,
       }),
     }
   )

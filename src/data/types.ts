@@ -88,6 +88,25 @@ export interface TeamMember {
   streak: number;
 }
 
+/** Qo'shimcha jamoa a'zosi — tasksiz, shunchaki kontakt uchun */
+export interface CustomMember {
+  id: string;          // unique uuid
+  name: string;
+  roleLabel: string;   // "Marketing Manager", "Content Creator" etc.
+  emoji: string;
+  phone: string;
+  telegram: string;
+  note: string;
+  addedAt: string;
+}
+
+/** Har bir rol uchun haqiqiy kontakt ma'lumoti */
+export interface MemberContact {
+  realName: string;
+  phone: string;
+  telegram: string;
+}
+
 export interface Badge {
   id: string;
   name: string;
