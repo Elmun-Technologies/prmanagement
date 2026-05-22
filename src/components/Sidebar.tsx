@@ -7,18 +7,20 @@ import ProgressBar from './ProgressBar';
 
 // Full-access navigation (Producer + Yordamchi)
 const NAV_FULL = [
-  { to: '/',         icon: '🚀', label: 'Zapusk' },
-  { to: '/daily',    icon: '📋', label: 'Bugungi ishlar' },
-  { to: '/kpi',      icon: '📊', label: 'KPI' },
-  { to: '/finance',  icon: '💹', label: 'Moliya Modeli' },
-  { to: '/team',     icon: '👥', label: 'Jamoa' },
-  { to: '/dashboard',icon: '📈', label: 'Statistika' },
+  { to: '/',          icon: '🚀', label: 'Zapusk' },
+  { to: '/daily',     icon: '📋', label: 'Bugungi ishlar' },
+  { to: '/bonuses',   icon: '🎁', label: 'Mukofotlar', highlight: true },
+  { to: '/kpi',       icon: '📊', label: 'KPI' },
+  { to: '/finance',   icon: '💹', label: 'Moliya Modeli' },
+  { to: '/team',      icon: '👥', label: 'Jamoa' },
+  { to: '/dashboard', icon: '📈', label: 'Statistika' },
 ];
 
 // Limited navigation (other roles)
 const NAV_LIMITED = [
-  { to: '/role-home', icon: '🏠', label: 'Mening ishlarim' },
-  { to: '/daily',     icon: '📅', label: 'Bugungi tasklar' },
+  { to: '/role-home', icon: '🏠', label: 'Mening ishlarim', highlight: false },
+  { to: '/daily',     icon: '📅', label: 'Bugungi tasklar', highlight: false },
+  { to: '/bonuses',   icon: '🎁', label: 'Mukofotlar',      highlight: true },
 ];
 
 export default function Sidebar() {
@@ -182,10 +184,15 @@ export default function Sidebar() {
             key={item.to}
             to={item.to}
             end={item.to === '/' || item.to === '/role-home'}
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+            className={({ isActive }) =>
+              `nav-link ${isActive ? 'active' : ''} ${item.highlight && !isActive ? 'border border-gold/20 bg-gold/5' : ''}`
+            }
           >
             <span>{item.icon}</span>
-            <span className="text-xs">{item.label}</span>
+            <span className={`text-xs ${item.highlight ? 'text-gold font-semibold' : ''}`}>{item.label}</span>
+            {item.highlight && (
+              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-gold animate-pulse flex-shrink-0" />
+            )}
           </NavLink>
         ))}
       </nav>

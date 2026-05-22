@@ -14,6 +14,7 @@ import KPITracker from './pages/KPITracker';
 import FinanceModel from './pages/FinanceModel';
 import RoleSelector from './pages/RoleSelector';
 import RoleHome from './pages/RoleHome';
+import Bonuses from './pages/Bonuses';
 import { useAuthStore } from './store/authStore';
 
 function AppShell() {
@@ -47,6 +48,7 @@ function AppShell() {
           <Route path="/gamification" element={fullAccess ? <Gamification /> : <Navigate to="/role-home" replace />} />
           <Route path="/team" element={fullAccess ? <Team /> : <Navigate to="/role-home" replace />} />
           <Route path="/finance" element={fullAccess ? <FinanceModel /> : <Navigate to="/role-home" replace />} />
+          <Route path="/bonuses" element={<Bonuses />} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to={fullAccess ? '/' : '/role-home'} replace />} />

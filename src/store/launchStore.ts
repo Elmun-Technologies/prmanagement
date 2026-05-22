@@ -27,6 +27,8 @@ interface LaunchStore extends LaunchState {
   customMembers: CustomMember[];
   // Rol -> real kontakt ma'lumot
   memberContacts: Record<string, MemberContact>;
+  // Ochilgan bonuslar ID lari
+  unlockedBonuses: string[];
 
   // Actions
   completeTask: (taskId: string, assignee?: string) => void;
@@ -47,6 +49,8 @@ interface LaunchStore extends LaunchState {
   updateCustomMember: (id: string, updates: Partial<Omit<CustomMember, 'id' | 'addedAt'>>) => void;
   removeCustomMember: (id: string) => void;
   setMemberContact: (roleId: string, contact: MemberContact) => void;
+  unlockBonus: (bonusId: string) => void;
+  resetBonus: (bonusId: string) => void;
 
   // Computed helpers
   getPhaseProgress: (phaseId: number) => number;
@@ -85,6 +89,7 @@ const INITIAL_RESOURCE_LINKS: Record<string, TaskResource[]> = {};
 const INITIAL_RESULT_LINKS: Record<string, string> = {};
 const INITIAL_CUSTOM_MEMBERS: CustomMember[] = [];
 const INITIAL_MEMBER_CONTACTS: Record<string, MemberContact> = {};
+const INITIAL_UNLOCKED_BONUSES: string[] = [];
 
 function checkAndAwardBadges(
   badges: Badge[],
@@ -160,6 +165,7 @@ export const useLaunchStore = create<LaunchStore>()(
       taskResultLinks: INITIAL_RESULT_LINKS,
       customMembers: INITIAL_CUSTOM_MEMBERS,
       memberContacts: INITIAL_MEMBER_CONTACTS,
+      unlockedBonuses: INITIAL_UNLOCKED_BONUSES,
 
       completeTask: (taskId, assigneeOverride) => {
         const state = get();
@@ -332,6 +338,18 @@ export const useLaunchStore = create<LaunchStore>()(
           memberContacts: { ...state.memberContacts, [roleId]: contact },
         })),
 
+      unlockBonus: (bonusId) =>
+        set((state) => ({
+          unlockedBonuses: state.unlockedBonuses.includes(bonusId)
+            ? state.unlockedBonuses
+            : [...state.unlockedBonuses, bonusId],
+        })),
+
+      resetBonus: (bonusId) =>
+        set((state) => ({
+          unlockedBonuses: state.unlockedBonuses.filter((id) => id !== bonusId),
+        })),
+
       getPhaseProgress: (phaseId) => {
         const tasks = get().tasks.filter((t) => t.phaseId === phaseId);
         if (tasks.length === 0) return 0;
@@ -434,6 +452,7 @@ export const useLaunchStore = create<LaunchStore>()(
         taskResultLinks: state.taskResultLinks,
         customMembers: state.customMembers,
         memberContacts: state.memberContacts,
+        unlockedBonuses: state.unlockedBonuses,
       }),
     }
   )
