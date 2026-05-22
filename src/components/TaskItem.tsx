@@ -4,21 +4,25 @@ import { useLaunchStore } from '../store/launchStore';
 import { TASK_RESOURCES, getResourceIcon, getResourceColor, getResourceTypeName } from '../data/taskResources';
 
 const ASSIGNEE_COLORS: Record<Assignee, string> = {
-  mentor:     'bg-blue-500/20 text-blue-300 border border-blue-500/30',
+  mentor:     'bg-gold/20 text-gold border border-gold/30',
   targetolog: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
   sotuvchi1:  'bg-green-500/20 text-green-300 border border-green-500/30',
   sotuvchi2:  'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30',
-  assistent:  'bg-orange-500/20 text-orange-300 border border-orange-500/30',
+  assistent:  'bg-blue-500/20 text-blue-300 border border-blue-500/30',
+  dizayner:   'bg-pink-500/20 text-pink-300 border border-pink-500/30',
+  videograf:  'bg-red-500/20 text-red-300 border border-red-500/30',
   jamoa:      'bg-gray-500/20 text-gray-300 border border-gray-500/30',
 };
 
 const ASSIGNEE_NAMES: Record<Assignee, string> = {
-  mentor: 'Mentor',
+  mentor:     'Producer',
   targetolog: 'Targetolog',
-  sotuvchi1: 'Sotuvchi 1',
-  sotuvchi2: 'Sotuvchi 2',
-  assistent: 'Assistent',
-  jamoa: 'Jamoa',
+  sotuvchi1:  'Sotuvchi 1',
+  sotuvchi2:  'Sotuvchi 2',
+  assistent:  'Yordamchi',
+  dizayner:   'Dizayner',
+  videograf:  'Videograf',
+  jamoa:      'Jamoa',
 };
 
 const CATEGORY_ICONS: Record<string, string> = {

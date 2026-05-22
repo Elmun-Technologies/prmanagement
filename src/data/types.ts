@@ -1,7 +1,29 @@
 export type TaskStatus = 'pending' | 'inprogress' | 'done';
-export type Assignee = 'mentor' | 'targetolog' | 'sotuvchi1' | 'sotuvchi2' | 'assistent' | 'jamoa';
+export type Assignee =
+  | 'mentor'
+  | 'targetolog'
+  | 'sotuvchi1'
+  | 'sotuvchi2'
+  | 'assistent'
+  | 'dizayner'
+  | 'videograf'
+  | 'jamoa';
+
 export type PhaseColor = 'phase1' | 'phase2' | 'phase3' | 'phase4' | 'phase5';
 export type LaunchStage = 'pre-seminar' | 'seminar' | 'main-course';
+
+/** Producer va Yordamchi — to'liq kirish. Qolganlar — faqat o'z tasklari. */
+export const FULL_ACCESS_ROLES: Assignee[] = ['mentor', 'assistent'];
+
+export interface UserRole {
+  id: Assignee;
+  name: string;
+  title: string;
+  emoji: string;
+  description: string;
+  color: string;
+  fullAccess: boolean;
+}
 export type ResourceType = 'sheets' | 'forms' | 'docs' | 'slides' | 'drive' | 'link';
 
 export interface TaskResource {

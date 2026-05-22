@@ -5591,11 +5591,13 @@ Maqsad: 300 lead, 300 seminar, 30 sotuv`,
 ];
 
 export const INITIAL_TEAM: TeamMember[] = [
-  { id: 'mentor',     name: 'Mentor',      role: 'Lead & Presenter',  avatar: 'M',  xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'targetolog', name: 'Targetolog',  role: 'Ads & Analytics',   avatar: 'T',  xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'sotuvchi1',  name: 'Sotuvchi 1',  role: 'Sales Manager',     avatar: 'S1', xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'sotuvchi2',  name: 'Sotuvchi 2',  role: 'Sales Manager',     avatar: 'S2', xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'assistent',  name: 'Assistent',   role: 'Operations',        avatar: 'A',  xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'mentor',     name: 'Producer',    role: 'Lead & Presenter',       avatar: '👑', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'assistent',  name: 'Yordamchi',   role: 'Producer Assistant',     avatar: '🤝', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'targetolog', name: 'Targetolog',  role: 'Reklama Mutaxassisi',    avatar: '🎯', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'sotuvchi1',  name: 'Sotuvchi 1',  role: 'Savdo Menejeri',         avatar: '💼', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'sotuvchi2',  name: 'Sotuvchi 2',  role: 'Savdo Menejeri',         avatar: '💼', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'dizayner',   name: 'Dizayner',    role: 'Grafik Dizayner',        avatar: '🎨', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'videograf',  name: 'Videograf',   role: 'Video Kontent Yaratuvchi', avatar: '🎬', xp: 0, tasksCompleted: 0, streak: 0 },
 ];
 
 export const INITIAL_BADGES: Badge[] = [
