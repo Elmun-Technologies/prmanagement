@@ -557,6 +557,113 @@ Mijoz "$1,500 qimmat" demasdan oldin u "$2,870 ga arziydi, $1,500 ga olayapman" 
 
   // 1.4 Logistika
   {
+    id: 'f1-t30-ig', phaseId: 1, subModuleId: '1.4', day: -30,
+    title: 'Instagram akkauntni audit qilish — qoldirish yoki yangi ochish?',
+    description: `## Maqsad
+Zapusk boshlanishidan oldin **eng birinchi strategik qaror**: mavjud Instagram akkauntni davom ettirish yoki yangi akkaunt ochish. Bu qaror butun content va trafik strategiyasini belgilaydi.
+
+---
+
+## 📊 1-QADAM: Mavjud akkauntni audit qiling
+
+Quyidagi ma'lumotlarni to'ldiring:
+
+| Ko'rsatkich | Qiymat | Baho |
+|---|---|---|
+| Obunachi soni | ___ | |
+| Oxirgi 30 kun Reach | ___ | |
+| Engagement Rate (ER) | __% | |
+| Asosiy auditoriya yoshi | ___ | |
+| Asosiy auditoriya joylashuvi | ___ | |
+| Akkaunt nishi (mavzu) | ___ | |
+| Oxirgi post sanasi | ___ | |
+| Bot/soxta obunachi ulushi | __% | |
+
+**ER hisoblash:** (Likes + Comments + Saves) ÷ Followers × 100
+
+**Tekshirish vositalari:**
+- [HypeAuditor.com](https://hypeauditor.com) — bot tahlili (bepul)
+- [Modash.io](https://modash.io) — audience quality
+- Instagram Insights → Audience tab
+
+---
+
+## ✅ QOLDIRISH MEZONLARI (agar barchasi mos kelsa)
+
+☐ **Nish mos**: Akkaunt biznes, savdo, pul, MoySklad yoki ERP mavzusida  
+☐ **ER ≥ 3%**: Real auditoriya faol  
+☐ **5,000+ obunachi**: Boshlang'ich massa bor  
+☐ **Bot ulushi < 20%**: HypeAuditor da sifat yaxshi  
+☐ **Geografiya mos**: 60%+ Toshkent/O'zbekiston  
+☐ **Yosh mos**: 25-45 yoshdagi biznes auditoriyasi  
+☐ **Oxirgi post**: 30 kun ichida (akkaunt aktiv)  
+
+**→ 6-7 ta mezon mos kelsa: QOLDIRING va tozalang.**
+
+---
+
+## 🆕 YANGI OCHISH MEZONLARI (agar quyidagilardan biri bo'lsa)
+
+☐ Akkaunt umuman boshqa nishda (moda, oziq-ovqat, travel va h.k.)  
+☐ ER < 1% (auditoriya sovuq, react qilmaydi)  
+☐ Bot ulushi > 30% (sifatsiz, Reach pasayadi)  
+☐ Akkaunt shaxsiy — biznes uchun mos emas  
+☐ Oxirgi post 3+ oydan eski (algoritm jazolagaan)  
+☐ Salbiy reputatsiya yoki muammoли kontent bor  
+
+**→ Bunlardan 2+ bo'lsa: YANGI OCHING.**
+
+---
+
+## 🔧 AGAR QOLDIRSANGIZ — Tozalash chek-listi
+
+☐ Bio'ni to'liq qayta yozing:
+\`\`\`
+📊 MoySklad | Biznesingizni avtomatlashtiring
+🎓 [SANA] BEPUL Seminar — 100 o'rin
+👇 Ro'yxatdan o'ting
+🔗 [LINK]
+\`\`\`
+☐ Profil rasmni professionallashtiring (logo yoki professional foto)  
+☐ Highlight'larni tozalang: faqat "Seminar", "Nima o'rganasiz", "Kimlar uchun"  
+☐ Pinned post: Seminar haqida announcement  
+☐ Eski mos kelmaydigan postlarni arxivlang (emas o'chiring)  
+☐ Business akkauntga o'tkazing (Creator yoki Business)  
+☐ Facebook Page bilan bog'lang (Meta Ads uchun)  
+☐ Instagram Shopping o'chiring (agar yoqilgan bo'lsa)  
+
+---
+
+## 🆕 AGAR YANGI OCHSANGIZ — Setup chek-listi
+
+☐ Username: @moysklad.uz yoki @moysklad_business yoki @[ismingiz].moysklad  
+☐ Bio yozing (yuqoridagi shablondan)  
+☐ 9-12 ta "dekorativ" post yuklang (grid ko'rinishi uchun) — boshlanishda bo'sh ko'rinmasin  
+☐ 500+ haqiqiy follow qiling (nishli akkauntlar) — organik o'sish uchun  
+☐ Business akkaunt qiling → Facebook Page yarating → Meta Business Suite ga ulang  
+☐ Pixel ulang (landing page bilan)  
+☐ Creator Studio → Content Calendar ni sozlang  
+
+---
+
+## 📋 QAROR va NATIJA
+
+**Qaror:** ☐ Mavjudni qoldiraman  ☐ Yangi ochamam
+
+**Sabab (2-3 jumla):**
+___________________________________
+
+**Yangi/tiklangan akkaunt username:** @_______________
+
+**Meta Business Suite ulanishi:** ☐ Ulandi  ☐ Hali yo'q
+
+---
+
+⚠️ **MUHIM:** Bu qarordan keyin Meta Ads kampaniyasi va barcha content kalendar ushbu akkauntga yo'naltiriladi. Keyinchalik akkaunt almashtirish butun Pixel va Ads tarixini yo'qotadi!`,
+    assignee: 'mentor', status: 'pending', xpReward: 60, category: 'strategiya',
+  },
+
+  {
     id: 'f1-t30-1', phaseId: 1, subModuleId: '1.4', day: -30,
     title: 'Zalni bron qilish',
     description: `## Maqsad

@@ -164,6 +164,9 @@ function NodeModal({
 }
 
 // ─── Single Org Node Card ─────────────────────────────────────────────────────
+const CARD_W = 116; // px — used for connector width calculations
+const CARD_GAP = 8;  // gap-2 = 8px
+
 function NodeCard({
   node,
   onClick,
@@ -177,43 +180,45 @@ function NodeCard({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative flex flex-col items-center text-center w-[140px] flex-shrink-0 transition-all hover:scale-105 ${highlighted ? 'scale-105' : ''}`}
+      style={{ width: `${CARD_W}px` }}
+      className={`group relative flex flex-col items-center text-center flex-shrink-0 transition-all hover:scale-105 ${highlighted ? 'scale-105' : ''}`}
     >
-      <div className={`w-full rounded-2xl border-2 p-3 transition-all ${node.color} ${
-        highlighted ? 'ring-2 ring-gold/50 shadow-lg shadow-gold/10' : 'hover:shadow-md'
-      } ${node.isVacant ? 'opacity-60 border-dashed' : ''}`}>
+      <div className={`w-full rounded-xl border-2 px-2 py-2 transition-all ${node.color} ${
+        highlighted ? 'ring-2 ring-gold/50 shadow-md shadow-gold/10' : 'hover:shadow-sm'
+      } ${node.isVacant ? 'opacity-55 border-dashed' : ''}`}>
+
         {/* Status badges */}
-        <div className="absolute -top-2 -right-2 flex gap-1">
+        <div className="absolute -top-1.5 -right-1.5 flex gap-0.5">
           {node.isVacant && (
-            <span className="text-[10px] bg-orange-500 text-white px-1.5 py-0.5 rounded-full font-bold">Vacant</span>
+            <span className="text-[9px] bg-orange-500 text-white px-1 py-0.5 rounded-full font-bold leading-none">Vacant</span>
           )}
           {node.isExternal && (
-            <span className="text-[10px] bg-gray-600 text-gray-300 px-1.5 py-0.5 rounded-full">Ext</span>
+            <span className="text-[9px] bg-gray-600 text-gray-300 px-1 py-0.5 rounded-full leading-none">Ext</span>
           )}
         </div>
 
         {/* Emoji */}
-        <div className="text-3xl mb-2">{node.emoji}</div>
+        <div className="text-xl mb-1 leading-none">{node.emoji}</div>
 
         {/* Name */}
-        <p className="font-bold text-xs leading-tight mb-0.5 truncate w-full" title={node.name}>
+        <p className="font-bold text-[11px] leading-tight truncate w-full" title={node.name}>
           {node.name}
         </p>
 
         {/* Title */}
-        <p className="text-[10px] opacity-70 leading-tight line-clamp-2" title={node.title}>
+        <p className="text-[9px] opacity-60 leading-tight line-clamp-2 mt-0.5" title={node.title}>
           {node.title}
         </p>
 
-        {/* Department */}
-        <div className={`mt-2 px-1.5 py-0.5 rounded-md text-[9px] font-semibold border inline-block ${DEPARTMENT_COLORS[node.department] || 'border-gray-500/30 bg-gray-500/10 text-gray-400'}`}>
+        {/* Department tag */}
+        <div className={`mt-1.5 px-1 py-px rounded text-[8px] font-semibold border inline-block ${DEPARTMENT_COLORS[node.department] || 'border-gray-500/30 bg-gray-500/10 text-gray-400'}`}>
           {node.department}
         </div>
       </div>
 
-      {/* Edit hint */}
-      <div className="absolute -bottom-5 text-[10px] text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-        ✎ Tahrirlash
+      {/* Edit hint on hover */}
+      <div className="absolute -bottom-4 text-[9px] text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+        ✎ tahrirlash
       </div>
     </button>
   );
@@ -221,16 +226,7 @@ function NodeCard({
 
 // ─── Connector line helpers ───────────────────────────────────────────────────
 function VertConnector() {
-  return <div className="w-px h-6 bg-dark-border mx-auto" />;
-}
-
-function HorizConnector({ count }: { count: number }) {
-  if (count <= 1) return null;
-  return (
-    <div className="flex items-center justify-center mb-0">
-      <div className="h-px bg-dark-border" style={{ width: `calc(${(count - 1)} * 152px)` }} />
-    </div>
-  );
+  return <div className="w-px h-4 bg-dark-border mx-auto" />;
 }
 
 // ─── Recursive Tree Level ─────────────────────────────────────────────────────
@@ -252,27 +248,25 @@ function TreeLevel({
   const children = allNodes.filter((n) => n.parentId === parentId);
   if (children.length === 0) return null;
 
+  const connectorWidth = (children.length - 1) * (CARD_W + CARD_GAP);
+
   return (
     <div className="flex flex-col items-center">
-      {/* Horizontal connector */}
+      {/* Horizontal connector bar */}
       {children.length > 1 && (
-        <div className="flex items-center justify-center w-full">
-          <div className="h-px bg-dark-border" style={{ width: `${(children.length - 1) * 152}px` }} />
-        </div>
+        <div className="h-px bg-dark-border" style={{ width: `${connectorWidth}px` }} />
       )}
 
       {/* Children row */}
-      <div className="flex items-start gap-2 justify-center">
+      <div className="flex items-start justify-center" style={{ gap: `${CARD_GAP}px` }}>
         {children.map((child) => (
           <div key={child.id} className="flex flex-col items-center">
-            {/* Vertical line from parent to this child */}
             <VertConnector />
             <NodeCard
               node={child}
               onClick={() => onEdit(child)}
               highlighted={highlightId === child.id}
             />
-            {/* Recurse */}
             <TreeLevel
               nodes={nodes}
               allNodes={allNodes}
@@ -381,24 +375,24 @@ export default function OrgChart() {
         </div>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-4 gap-2">
+      {/* Stats row — compact */}
+      <div className="flex gap-2 flex-wrap">
         {[
-          { label: 'Jami lavozim', value: nodes.length, color: 'text-white' },
-          { label: 'Bo\'limlar', value: departments.length, color: 'text-blue-400' },
+          { label: 'Lavozim', value: nodes.length, color: 'text-white' },
+          { label: "Bo'lim", value: departments.length, color: 'text-blue-400' },
           { label: 'Vacant', value: totalVacant, color: 'text-orange-400' },
           { label: 'External', value: totalExternal, color: 'text-gray-400' },
         ].map((s) => (
-          <div key={s.label} className="bg-dark-surface border border-dark-border rounded-xl p-3 text-center">
-            <p className={`text-xl font-black ${s.color}`}>{s.value}</p>
-            <p className="text-[10px] text-gray-600">{s.label}</p>
+          <div key={s.label} className="bg-dark-surface border border-dark-border rounded-lg px-4 py-1.5 flex items-center gap-2">
+            <p className={`text-base font-black ${s.color}`}>{s.value}</p>
+            <p className="text-[10px] text-gray-500">{s.label}</p>
           </div>
         ))}
       </div>
 
       {view === 'tree' ? (
         /* ── TREE VIEW ── */
-        <div className="bg-dark-card border border-dark-border rounded-2xl p-6 overflow-x-auto">
+        <div className="bg-dark-card border border-dark-border rounded-2xl p-4 overflow-x-auto">
           <div className="min-w-max flex flex-col items-center gap-0">
             {/* Root nodes */}
             {rootNodes.map((root) => (
