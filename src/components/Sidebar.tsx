@@ -7,20 +7,27 @@ import ProgressBar from './ProgressBar';
 
 // Full-access navigation (Producer + Yordamchi)
 const NAV_FULL = [
-  { to: '/',          icon: '🚀', label: 'Zapusk' },
-  { to: '/daily',     icon: '📋', label: 'Bugungi ishlar' },
-  { to: '/bonuses',   icon: '🎁', label: 'Mukofotlar', highlight: true },
-  { to: '/kpi',       icon: '📊', label: 'KPI' },
-  { to: '/finance',   icon: '💹', label: 'Moliya Modeli' },
-  { to: '/team',      icon: '👥', label: 'Jamoa' },
-  { to: '/dashboard', icon: '📈', label: 'Statistika' },
+  { to: '/',            icon: '🚀', label: 'Zapusk',        highlight: false },
+  { to: '/daily',       icon: '📋', label: 'Bugungi ishlar', highlight: false },
+  { to: '/bonuses',     icon: '🎁', label: 'Mukofotlar',    highlight: true },
+  { to: '/standup',     icon: '🗣️', label: 'Standup',       highlight: false },
+  { to: '/calendar',    icon: '📅', label: 'Kalendar',      highlight: false },
+  { to: '/launch-day',  icon: '🚨', label: 'Seminar kuni',  highlight: false },
+  { to: '/analytics',   icon: '📊', label: 'Analitika',     highlight: false },
+  { to: '/kpi',         icon: '🎯', label: 'KPI',           highlight: false },
+  { to: '/finance',     icon: '💹', label: 'Moliya',        highlight: false },
+  { to: '/team',        icon: '👥', label: 'Jamoa',         highlight: false },
+  { to: '/dashboard',   icon: '📈', label: 'Statistika',    highlight: false },
 ];
 
 // Limited navigation (other roles)
 const NAV_LIMITED = [
-  { to: '/role-home', icon: '🏠', label: 'Mening ishlarim', highlight: false },
-  { to: '/daily',     icon: '📅', label: 'Bugungi tasklar', highlight: false },
-  { to: '/bonuses',   icon: '🎁', label: 'Mukofotlar',      highlight: true },
+  { to: '/role-home',  icon: '🏠', label: 'Mening ishlarim', highlight: false },
+  { to: '/daily',      icon: '📅', label: 'Bugungi tasklar',  highlight: false },
+  { to: '/standup',    icon: '🗣️', label: 'Standup',          highlight: false },
+  { to: '/bonuses',    icon: '🎁', label: 'Mukofotlar',       highlight: true },
+  { to: '/calendar',   icon: '📅', label: 'Kalendar',         highlight: false },
+  { to: '/launch-day', icon: '🚨', label: 'Seminar kuni',     highlight: false },
 ];
 
 export default function Sidebar() {
@@ -178,6 +185,19 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
+      {/* Search button */}
+      <div className="px-3 py-2">
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true }))}
+          className="w-full flex items-center gap-2 px-3 py-2 bg-dark-surface border border-dark-border rounded-xl text-xs text-gray-500 hover:border-gold/40 hover:text-gray-300 transition-all"
+        >
+          <span>🔍</span>
+          <span className="flex-1 text-left">Qidirish...</span>
+          <kbd className="text-[10px] bg-dark-hover border border-dark-border px-1 py-0.5 rounded">⌘K</kbd>
+        </button>
+      </div>
+
       <nav className="px-2 py-2 border-b border-dark-border space-y-0.5">
         {(fullAccess ? NAV_FULL : NAV_LIMITED).map((item) => (
           <NavLink

@@ -15,10 +15,16 @@ import FinanceModel from './pages/FinanceModel';
 import RoleSelector from './pages/RoleSelector';
 import RoleHome from './pages/RoleHome';
 import Bonuses from './pages/Bonuses';
+import LaunchDayChecklist from './pages/LaunchDayChecklist';
+import Standup from './pages/Standup';
+import Analytics from './pages/Analytics';
+import Calendar from './pages/CalendarView';
+import GlobalSearch, { useGlobalSearch } from './components/GlobalSearch';
 import { useAuthStore } from './store/authStore';
 
 function AppShell() {
   const { isLoggedIn, hasFullAccess } = useAuthStore();
+  const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
 
   // Show role selector if not logged in
   if (!isLoggedIn()) {
@@ -48,13 +54,18 @@ function AppShell() {
           <Route path="/gamification" element={fullAccess ? <Gamification /> : <Navigate to="/role-home" replace />} />
           <Route path="/team" element={fullAccess ? <Team /> : <Navigate to="/role-home" replace />} />
           <Route path="/finance" element={fullAccess ? <FinanceModel /> : <Navigate to="/role-home" replace />} />
-          <Route path="/bonuses" element={<Bonuses />} />
+          <Route path="/bonuses"     element={<Bonuses />} />
+          <Route path="/launch-day"  element={<LaunchDayChecklist />} />
+          <Route path="/standup"     element={<Standup />} />
+          <Route path="/analytics"   element={fullAccess ? <Analytics /> : <Navigate to="/role-home" replace />} />
+          <Route path="/calendar"    element={<Calendar />} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to={fullAccess ? '/' : '/role-home'} replace />} />
         </Routes>
       </main>
       <XPPopups />
+      <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }
