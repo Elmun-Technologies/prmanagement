@@ -21,10 +21,12 @@ import Analytics from './pages/Analytics';
 import Calendar from './pages/CalendarView';
 import GlobalSearch, { useGlobalSearch } from './components/GlobalSearch';
 import { useAuthStore } from './store/authStore';
+import { useState } from 'react';
 
 function AppShell() {
   const { isLoggedIn, hasFullAccess } = useAuthStore();
   const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Show role selector if not logged in
   if (!isLoggedIn()) {
@@ -35,8 +37,40 @@ function AppShell() {
 
   return (
     <div className="flex min-h-screen bg-dark-bg">
-      <Sidebar />
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/60 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar — hidden on mobile unless open */}
+      <div className={`fixed md:sticky top-0 z-40 md:z-auto h-screen transition-transform duration-300 ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}>
+        <Sidebar onClose={() => setSidebarOpen(false)} />
+      </div>
+
       <main className="flex-1 overflow-y-auto min-h-screen">
+        {/* Mobile topbar */}
+        <div className="sticky top-0 z-20 flex items-center gap-3 px-4 py-3 bg-dark-card border-b border-dark-border md:hidden">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="text-gray-400 hover:text-white text-xl"
+          >
+            ☰
+          </button>
+          <span className="font-bold text-white flex-1">MoySklad Zapusk</span>
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="text-gray-400 hover:text-white"
+          >
+            🔍
+          </button>
+        </div>
         <Routes>
           {/* Common routes for all roles */}
           <Route path="/daily" element={<DailyTodo />} />

@@ -30,7 +30,7 @@ const NAV_LIMITED = [
   { to: '/launch-day', icon: '🚨', label: 'Seminar kuni',     highlight: false },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const navigate = useNavigate();
   const [expandedStage, setExpandedStage] = useState<string | null>('pre-seminar');
 
@@ -204,6 +204,7 @@ export default function Sidebar() {
             key={item.to}
             to={item.to}
             end={item.to === '/' || item.to === '/role-home'}
+            onClick={onClose}
             className={({ isActive }) =>
               `nav-link ${isActive ? 'active' : ''} ${item.highlight && !isActive ? 'border border-gold/20 bg-gold/5' : ''}`
             }
