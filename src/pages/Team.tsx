@@ -13,14 +13,16 @@ import {
 } from '../data/teamManagement';
 import type { Assignee, CustomMember, MemberContact } from '../data/types';
 import { USER_ROLES } from '../store/authStore';
+import OrgChart from '../components/OrgChart';
 
 const TABS = [
-  { id: 'members', label: 'A\'zolar', icon: '👥' },
-  { id: 'overview', label: 'Ko\'rinish', icon: '📊' },
+  { id: 'org',        label: 'Org Chart',  icon: '🏛️' },
+  { id: 'members',    label: 'A\'zolar',   icon: '👥' },
+  { id: 'overview',   label: 'Ko\'rinish', icon: '📊' },
   { id: 'management', label: 'Management', icon: '🏢' },
-  { id: 'roles', label: 'Rollar', icon: '👤' },
-  { id: 'raci', label: 'Matritsa', icon: '📋' },
-  { id: 'tasks', label: 'Ishlar', icon: '✅' },
+  { id: 'roles',      label: 'Rollar',     icon: '👤' },
+  { id: 'raci',       label: 'RACI',       icon: '📋' },
+  { id: 'tasks',      label: 'Ishlar',     icon: '✅' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -284,7 +286,7 @@ export default function Team() {
     addCustomMember, updateCustomMember, removeCustomMember, setMemberContact,
   } = useLaunchStore();
 
-  const [tab, setTab] = useState<TabId>('members');
+  const [tab, setTab] = useState<TabId>('org');
   const [expandedRole, setExpandedRole] = useState<Assignee | null>('mentor');
   const [taskFilter, setTaskFilter] = useState<Assignee | 'all'>('all');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -370,6 +372,9 @@ export default function Team() {
           </button>
         ))}
       </div>
+
+      {/* ORG CHART */}
+      {tab === 'org' && <OrgChart />}
 
       {/* MEMBERS */}
       {tab === 'members' && (
