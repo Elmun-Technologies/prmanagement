@@ -16,13 +16,13 @@ const ASSIGNEE_COLORS: Record<Assignee, string> = {
 
 const ASSIGNEE_NAMES: Record<Assignee, string> = {
   mentor:     'Producer',
-  targetolog: 'Targetolog',
-  sotuvchi1:  'Sotuvchi 1',
-  sotuvchi2:  'Sotuvchi 2',
-  assistent:  'Yordamchi',
-  dizayner:   'Dizayner',
-  videograf:  'Videograf',
-  jamoa:      'Jamoa',
+  assistent:  'Ops Manager',
+  targetolog: 'Traffic Mgr',
+  sotuvchi1:  'Sales Closer 1',
+  sotuvchi2:  'Sales Closer 2',
+  dizayner:   'Creative',
+  videograf:  'Video Creator',
+  jamoa:      'Team',
 };
 
 const CATEGORY_ICONS: Record<string, string> = {

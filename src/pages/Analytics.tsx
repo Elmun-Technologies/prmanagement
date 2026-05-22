@@ -13,9 +13,14 @@ const CATEGORY_CONFIG: Record<string, { label: string; emoji: string; color: str
 };
 
 const ASSIGNEE_NAMES: Record<string, string> = {
-  mentor: 'Producer', targetolog: 'Targetolog', sotuvchi1: 'Sotuvchi 1',
-  sotuvchi2: 'Sotuvchi 2', assistent: 'Yordamchi', dizayner: 'Dizayner',
-  videograf: 'Videograf', jamoa: 'Jamoa',
+  mentor:     'Producer',
+  assistent:  'Ops Manager',
+  targetolog: 'Traffic Mgr',
+  sotuvchi1:  'Sales Closer 1',
+  sotuvchi2:  'Sales Closer 2',
+  dizayner:   'Creative',
+  videograf:  'Video Creator',
+  jamoa:      'Team',
 };
 
 function MiniBar({ value, max, color = 'bg-gold', label, sublabel }: {

@@ -7,27 +7,27 @@ export const LAUNCH_STAGES: LaunchStageInfo[] = [
   {
     id: 'pre-seminar',
     order: 1,
-    label: 'Seminargacha',
-    subtitle: 'T-30 dan T-1 gacha · Tayyorgarlik',
-    description: 'Bozor tahlili, taklif, trafik mashinasi va auditoriyani isitish. Seminar oldidan barcha ishlar.',
+    label: 'Pre-Launch',
+    subtitle: 'T-30 → T-1 · CustDev + Traffic Engine + Nurturing',
+    description: 'CustDev, Offer Stack, Traffic Engine (Landing + Paid + Organic), Progrev — seminar launch uchun barcha tayyorgarlik.',
     emoji: '🏗️',
     phaseIds: [1, 2, 3],
   },
   {
     id: 'seminar',
     order: 2,
-    label: 'Seminarda',
-    subtitle: 'T0 · Seminar kuni',
-    description: '90 daqiqalik seminar, jonli demo, zalda $1,500 kurs sotuvi. 600,000 so\'m kirish — filter.',
+    label: 'D-Day / Launch',
+    subtitle: 'T0 · Live Event · Closing',
+    description: '90-min seminar, Live Demo, Case Study, Sales Session — zalda 20 ta Closing, $1,500/o\'quvchi.',
     emoji: '🎯',
     phaseIds: [4],
   },
   {
     id: 'main-course',
     order: 3,
-    label: 'Asosiy Kurs',
-    subtitle: 'T+1 dan T+21 · Dojim → Kurs launch',
-    description: '$2,000 kurs: dojim, to\'lov, shartnoma, joy, progrev, platforma, Course Pack, 6 hafta darslar, 1-dars.',
+    label: 'Course Delivery',
+    subtitle: 'T+1 → T+21 · Follow-up + Onboarding + Delivery',
+    description: 'Follow-up closing, Onboarding, Course Pack, LMS setup, 6-week Delivery, Retention — $2,000 student experience.',
     emoji: '🚀',
     phaseIds: [5],
   },
@@ -39,9 +39,9 @@ export const LAUNCH_STAGES: LaunchStageInfo[] = [
 export const PHASES: Phase[] = [
   {
     id: 1,
-    name: 'Poydevor',
-    shortName: 'Modul 1',
-    goal: 'Real og\'riqni topish, rad etib bo\'lmas taklifni yasash va logistikani tayyorlash',
+    name: 'Foundation',
+    shortName: 'CustDev & Offer',
+    goal: 'CustDev interviews → TOP-7 Pain Points → ICP Persona → Irresistible Offer Stack → Ops Setup',
     color: 'phase1',
     stage: 'pre-seminar',
     dayStart: -30,
@@ -50,9 +50,9 @@ export const PHASES: Phase[] = [
   },
   {
     id: 2,
-    name: 'Mashina Yig\'ish',
-    shortName: 'Modul 2',
-    goal: 'Instagram trafik mashinasini qurish — landing, reels, ads, ManyChat avtomatikasi',
+    name: 'Traffic Engine',
+    shortName: 'Traffic & Automation',
+    goal: 'Landing Page + Reels Content Production + ManyChat Bot + Meta Ads (Paid Traffic) + Collab Content',
     color: 'phase2',
     stage: 'pre-seminar',
     dayStart: -20,
@@ -61,9 +61,9 @@ export const PHASES: Phase[] = [
   },
   {
     id: 3,
-    name: 'Isitish',
-    shortName: 'Modul 3',
-    goal: '300+ registratsiya yig\'ish, hamkorlar va kunlik kontentni ishlashtirish',
+    name: 'Nurturing / Progrev',
+    shortName: 'Nurture & Warm-Up',
+    goal: '300+ Registrations: Organic Content daily, Lead Nurturing, PR Collab, Event Setup — auditoriyani qizdirish',
     color: 'phase3',
     stage: 'pre-seminar',
     dayStart: -10,
@@ -72,9 +72,9 @@ export const PHASES: Phase[] = [
   },
   {
     id: 4,
-    name: 'Seminar Kuni',
-    shortName: 'Seminar',
-    goal: 'Seminar o\'tkazish — jonli mijoz keys, networking, ovqatlanish; zalda 20 ta $1,500 kurs sotish',
+    name: 'D-Day / Launch',
+    shortName: 'Live Event',
+    goal: 'Live Seminar — Case Study, Live Demo, Sales Session, Closing: 20 seats × $1,500 = $30,000 Revenue',
     color: 'phase4',
     stage: 'seminar',
     dayStart: 0,
@@ -83,9 +83,9 @@ export const PHASES: Phase[] = [
   },
   {
     id: 5,
-    name: 'Asosiy Kurs',
-    shortName: 'Kurs',
-    goal: 'Dojim + 20-27 talaba onboarding: to\'lov, shartnoma, platforma, Course Pack, progrev, 1-dars — $2,000 tajriba',
+    name: 'Course Delivery',
+    shortName: 'Delivery & Retention',
+    goal: 'Follow-up Close → Onboarding (20–27 students) → LMS + Course Pack → 6-Week Delivery → Retention',
     color: 'phase5',
     stage: 'main-course',
     dayStart: 1,
@@ -98,35 +98,35 @@ export const PHASES: Phase[] = [
 // BO'LIMCHALAR (Sub-modules)
 // ─────────────────────────────────────────────
 export const SUB_MODULES: SubModule[] = [
-  // Faza 1
-  { id: '1.1', phaseId: 1, order: 1, icon: '🔍', name: 'Bozor Tahlili',     description: 'Mijozlar bilan intervyu, TOP-7 og\'riqni aniqlash' },
-  { id: '1.2', phaseId: 1, order: 2, icon: '👤', name: 'Mijoz Portreti',     description: '3 ta ICP kartochkasi — chakana, marketplace, optovik' },
-  { id: '1.3', phaseId: 1, order: 3, icon: '💎', name: 'Taklif Yasash',      description: 'Offer, narx zinapoyasi, value stack' },
-  { id: '1.4', phaseId: 1, order: 4, icon: '📦', name: 'Logistika',          description: 'Zal, to\'lov tizimi, shartnoma, yuridik' },
-  { id: '1.5', phaseId: 1, order: 5, icon: '🤝', name: 'Hamkorlar',          description: 'Potensial hamkorlarni topish va shartnoma imzolash' },
+  // Phase 1 — Foundation (CustDev & Offer)
+  { id: '1.1', phaseId: 1, order: 1, icon: '🔍', name: 'CustDev',           description: 'Customer interviews — TOP-7 Pain Points, Jobs-to-be-Done aniqlash' },
+  { id: '1.2', phaseId: 1, order: 2, icon: '👤', name: 'ICP / Persona',     description: '3 ta Ideal Customer Profile — chakana, marketplace, optovik' },
+  { id: '1.3', phaseId: 1, order: 3, icon: '💎', name: 'Offer Stack',       description: 'Irresistible Offer, narx zinapoyasi (Price Ladder), Value Stack' },
+  { id: '1.4', phaseId: 1, order: 4, icon: '📦', name: 'Ops Setup',         description: 'Venue, Payment Gateway, Contract, Legal — operatsion tayyorgarlik' },
+  { id: '1.5', phaseId: 1, order: 5, icon: '🤝', name: 'BD / Partners',     description: 'Business Development — potensial partnyorlarni topish va NDA/MOU imzolash' },
 
-  // Faza 2
-  { id: '2.1', phaseId: 2, order: 1, icon: '🌐', name: 'Landing Sayt',       description: 'Tilda da 1 ekranli sayt, forma, Telegram guruh' },
-  { id: '2.2', phaseId: 2, order: 2, icon: '🎬', name: 'Kontent S\'yomka',   description: '18 ta Reels skript, s\'yomka, montaj' },
-  { id: '2.3', phaseId: 2, order: 3, icon: '🤖', name: 'Avtomatika',         description: 'ManyChat ketma-ketligi, WhatsApp tez javoblar' },
-  { id: '2.4', phaseId: 2, order: 4, icon: '📈', name: 'Target Reklama',     description: 'Meta Ads 3 kampaniya, auditoriya, kreativlar, Pixel' },
-  { id: '2.5', phaseId: 2, order: 5, icon: '🤝', name: 'Hamkor Kontent',     description: 'Hamkorlar bilan kontent kelishuvi va tayyorlash' },
+  // Phase 2 — Traffic Engine
+  { id: '2.1', phaseId: 2, order: 1, icon: '🌐', name: 'Landing Page',      description: 'Conversion-optimized LP (Tilda), Lead Form, Telegram Community setup' },
+  { id: '2.2', phaseId: 2, order: 2, icon: '🎬', name: 'Content Production', description: '18× Reels — Script → Shoot → Edit; Hook, Body, CTA formatida' },
+  { id: '2.3', phaseId: 2, order: 3, icon: '🤖', name: 'Automation / Bot',  description: 'ManyChat Flow (DM → Lead → Qualifier), WhatsApp quick replies' },
+  { id: '2.4', phaseId: 2, order: 4, icon: '📈', name: 'Paid Traffic',      description: 'Meta Ads: 3 campaigns, Lookalike + Interest audiences, Creatives A/B, Pixel' },
+  { id: '2.5', phaseId: 2, order: 5, icon: '🤝', name: 'Collab Content',    description: 'Partner content brief, approval, post schedule, performance tracking' },
 
-  // Faza 3
-  { id: '3.1', phaseId: 3, order: 1, icon: '📱', name: 'Kunlik Kontent',     description: '18 ta reels va stories kunlik rejada chiqarish' },
-  { id: '3.2', phaseId: 3, order: 2, icon: '📞', name: 'Lead Boshqaruv',     description: 'Qo\'ng\'iroqlar, Telegram guruh, tasdiqlash' },
-  { id: '3.3', phaseId: 3, order: 3, icon: '🤝', name: 'PR Kollaboratsiya',   description: 'Hamkor talablari, brief, post jadvali, natija kuzatuvi' },
-  { id: '3.4', phaseId: 3, order: 4, icon: '🏛️', name: 'Zal & Seminar Pack', description: 'Zal dizayn, Seminar Pack, emotsiya rejasi, texnik va sotuv brifing' },
+  // Phase 3 — Nurturing / Progrev
+  { id: '3.1', phaseId: 3, order: 1, icon: '📱', name: 'Organic Content',   description: '18× Reels + Stories — daily posting, engagement, Reach & CTR kuzatuvi' },
+  { id: '3.2', phaseId: 3, order: 2, icon: '📞', name: 'Lead Nurturing',    description: 'Cold/Warm calls, Telegram group activation, Registration confirmation' },
+  { id: '3.3', phaseId: 3, order: 3, icon: '🤝', name: 'PR / Collab',      description: 'Partner requirements, Brief, post calendar, ROI measurement' },
+  { id: '3.4', phaseId: 3, order: 4, icon: '🏛️', name: 'Event Setup',      description: 'Venue staging, Seminar Pack design, Emotion Script, Tech & Sales briefing' },
 
-  // Faza 4 — Seminar (3 qism)
-  { id: '4.1', phaseId: 4, order: 1, icon: '📋', name: 'Seminardan oldin',  description: 'T-7 dan T-1 — zal bron, Pack, ro\'yxat tasdiq, katering, jonli keys mijoz, mentor tayyorlik, eslatmalar' },
-  { id: '4.2', phaseId: 4, order: 2, icon: '🎤', name: 'Seminar vaqtida',   description: 'T0 — 09:00 jamoa kirish, networking, 3 hikoya, demo, jonli keys, sotuv sessiyasi, Q&A, 20 ta yopish' },
-  { id: '4.3', phaseId: 4, order: 3, icon: '📊', name: 'Seminardan keyin',  description: 'T0 kechqurun + T+1 — natijalar, dojim ro\'yxat, kelmagan 600k, social proof kontent, hisobot' },
+  // Phase 4 — D-Day / Launch
+  { id: '4.1', phaseId: 4, order: 1, icon: '📋', name: 'Pre-Event',        description: 'T-7 → T-1 — Venue booking, Pack prep, Attendee confirmation, Catering, Case Study client, Producer prep, Reminders' },
+  { id: '4.2', phaseId: 4, order: 2, icon: '🎤', name: 'LIVE Event',       description: 'T0 — Networking open, 3 Stories (hook/proof/offer), Live Demo, Case Study, Sales Session, Q&A, 20 Closings' },
+  { id: '4.3', phaseId: 4, order: 3, icon: '📊', name: 'Post-Event',       description: 'T0 evening + T+1 — Revenue report, Follow-up list, 600k no-show call, Social Proof content, Debrief' },
 
-  // Faza 5 — Asosiy Kurs (3 qism)
-  { id: '5.1', phaseId: 5, order: 1, icon: '🔧', name: 'Kursdan oldin',     description: 'T+1 → T+14 — dojim sotuvlar, to\'lov, shartnoma, joy, platforma, progrev, Course Pack, materiallar' },
-  { id: '5.2', phaseId: 5, order: 2, icon: '🎓', name: 'Kurs vaqtida',      description: 'T+14 → T+21 — 1-dars, onboarding, haftalik darslar, LIVE session, uy ishi tracking' },
-  { id: '5.3', phaseId: 5, order: 3, icon: '⭐', name: 'Kursdan keyin',     description: 'T+22+ — testimoniallar, feedback, sertifikat, hamkor hisob, keyingi guruh tayyorlik' },
+  // Phase 5 — Course Delivery
+  { id: '5.1', phaseId: 5, order: 1, icon: '🔧', name: 'Onboarding',       description: 'T+1 → T+14 — Follow-up close, Payment, Contract, LMS access, Course Pack, Progrev, Materials' },
+  { id: '5.2', phaseId: 5, order: 2, icon: '🎓', name: 'Delivery',         description: 'T+14 → T+21 — Lesson 1, Weekly classes, LIVE Q&A sessions, Homework tracking' },
+  { id: '5.3', phaseId: 5, order: 3, icon: '⭐', name: 'Retention / NPS',  description: 'T+22+ — Testimonials, NPS survey, Certificate, Partner revenue share, Next cohort prep' },
 ];
 
 // ─────────────────────────────────────────────
@@ -5591,13 +5591,13 @@ Maqsad: 300 lead, 300 seminar, 30 sotuv`,
 ];
 
 export const INITIAL_TEAM: TeamMember[] = [
-  { id: 'mentor',     name: 'Producer',    role: 'Lead & Presenter',       avatar: '👑', xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'assistent',  name: 'Yordamchi',   role: 'Producer Assistant',     avatar: '🤝', xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'targetolog', name: 'Targetolog',  role: 'Reklama Mutaxassisi',    avatar: '🎯', xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'sotuvchi1',  name: 'Sotuvchi 1',  role: 'Savdo Menejeri',         avatar: '💼', xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'sotuvchi2',  name: 'Sotuvchi 2',  role: 'Savdo Menejeri',         avatar: '💼', xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'dizayner',   name: 'Dizayner',    role: 'Grafik Dizayner',        avatar: '🎨', xp: 0, tasksCompleted: 0, streak: 0 },
-  { id: 'videograf',  name: 'Videograf',   role: 'Video Kontent Yaratuvchi', avatar: '🎬', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'mentor',     name: 'Producer',       role: 'Lead & Presenter',       avatar: '👑', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'assistent',  name: 'Ops Manager',    role: 'Producer Assistant',     avatar: '🤝', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'targetolog', name: 'Traffic Mgr',    role: 'Paid Traffic Specialist', avatar: '🎯', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'sotuvchi1',  name: 'Sales Closer 1', role: 'Sales Manager / Closer',  avatar: '💼', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'sotuvchi2',  name: 'Sales Closer 2', role: 'Sales Manager / Closer',  avatar: '💼', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'dizayner',   name: 'Creative',       role: 'Creative Designer',       avatar: '🎨', xp: 0, tasksCompleted: 0, streak: 0 },
+  { id: 'videograf',  name: 'Video Creator',  role: 'Video Production',        avatar: '🎬', xp: 0, tasksCompleted: 0, streak: 0 },
 ];
 
 export const INITIAL_BADGES: Badge[] = [

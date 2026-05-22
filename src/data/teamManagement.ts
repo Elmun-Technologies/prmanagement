@@ -30,12 +30,12 @@ export const TEAM_ORG = {
 };
 
 export const MEETING_SCHEDULE = [
-  { when: 'Har dushanba 10:00', name: 'Haftalik Sprint', who: 'Hamma', duration: '60 min', agenda: 'O\'tgan hafta raqamlar → Bu hafta KPI → Muammolar → Vazifa taqsimlash' },
-  { when: 'Har kun 09:30', name: 'Daily Standup', who: 'Hamma', duration: '15 min', agenda: 'Kecha nima qildim → Bugun nima qilaman → Blokirovchi muammo' },
-  { when: 'T-2 kechqurun', name: 'Seminar Repetitsiya', who: 'Mentor + Assistent + Sotuvchilar', duration: '120 min', agenda: 'Texnik + mentor skript + sotuv rol o\'ynash' },
-  { when: 'Seminar kuni 09:15', name: 'Sabah Brifing', who: 'Hamma', duration: '15 min', agenda: 'Rollar, signal so\'zlar, maqsad raqamlar' },
-  { when: 'T+1 15:00', name: 'Dojim Kickoff', who: 'Sotuvchilar + Mentor', duration: '30 min', agenda: 'Segmentlar, skriptlar, kunlik qo\'ng\'iroq rejasi' },
-  { when: 'T+7', name: 'Kurs Launch Brifing', who: 'Mentor + Assistent', duration: '45 min', agenda: 'Platforma, progrev, 1-dars tayyorlik' },
+  { when: 'Har dushanba 10:00', name: 'Weekly Sprint Review', who: 'All Team', duration: '60 min', agenda: 'Last week KPIs → This week OKRs → Blockers → Task assignment' },
+  { when: 'Har kun 09:30', name: 'Daily Standup', who: 'All Team', duration: '15 min', agenda: 'Yesterday → Today → Blockers' },
+  { when: 'T-2 kechqurun', name: 'D-Day Rehearsal', who: 'Producer + Ops + Closers', duration: '120 min', agenda: 'Tech check + Producer script + Sales role-play' },
+  { when: 'D-Day 09:15', name: 'Morning Briefing', who: 'All Team', duration: '15 min', agenda: 'Roles, Signal words, Revenue target' },
+  { when: 'T+1 15:00', name: 'Follow-up Kickoff', who: 'Sales Closers + Producer', duration: '30 min', agenda: 'Segments (A/B/C), Scripts, Daily call plan' },
+  { when: 'T+7', name: 'Course Launch Briefing', who: 'Producer + Ops Manager', duration: '45 min', agenda: 'LMS setup, Progrev, Lesson 1 prep' },
 ];
 
 export const ESCALATION_RULES = [
@@ -84,7 +84,7 @@ export const DAILY_MANAGEMENT_CHECKLIST = {
 };
 
 export const RACI_MATRIX: { activity: string; pre: Record<Assignee, string>; seminar: Record<Assignee, string>; course: Record<Assignee, string> }[] = [
-  { activity: 'Bozor intervyu', pre: { mentor: 'A', targetolog: 'I', sotuvchi1: '—', sotuvchi2: '—', assistent: 'C', jamoa: '—' }, seminar: { mentor: '—', targetolog: '—', sotuvchi1: '—', sotuvchi2: '—', assistent: '—', jamoa: '—' }, course: { mentor: '—', targetolog: '—', sotuvchi1: '—', sotuvchi2: '—', assistent: '—', jamoa: '—' } },
+  { activity: 'CustDev Interviews', pre: { mentor: 'A', targetolog: 'I', sotuvchi1: '—', sotuvchi2: '—', assistent: 'C', jamoa: '—' }, seminar: { mentor: '—', targetolog: '—', sotuvchi1: '—', sotuvchi2: '—', assistent: '—', jamoa: '—' }, course: { mentor: '—', targetolog: '—', sotuvchi1: '—', sotuvchi2: '—', assistent: '—', jamoa: '—' } },
   { activity: 'Meta Ads boshqaruv', pre: { mentor: 'I', targetolog: 'A/R', sotuvchi1: '—', sotuvchi2: '—', assistent: 'C', jamoa: '—' }, seminar: { mentor: 'I', targetolog: 'A', sotuvchi1: '—', sotuvchi2: '—', assistent: '—', jamoa: '—' }, course: { mentor: 'I', targetolog: 'A', sotuvchi1: '—', sotuvchi2: '—', assistent: '—', jamoa: '—' } },
   { activity: 'Kunlik kontent (Reels/Stories)', pre: { mentor: 'A', targetolog: 'R', sotuvchi1: '—', sotuvchi2: '—', assistent: 'C', jamoa: '—' }, seminar: { mentor: 'I', targetolog: 'A', sotuvchi1: '—', sotuvchi2: '—', assistent: 'C', jamoa: '—' }, course: { mentor: 'A', targetolog: 'R', sotuvchi1: '—', sotuvchi2: '—', assistent: 'C', jamoa: '—' } },
   { activity: 'Lead CRM / Sheets', pre: { mentor: 'I', targetolog: 'C', sotuvchi1: 'R', sotuvchi2: 'R', assistent: 'A', jamoa: '—' }, seminar: { mentor: 'I', targetolog: '—', sotuvchi1: 'R', sotuvchi2: 'R', assistent: 'A', jamoa: 'C' }, course: { mentor: 'I', targetolog: '—', sotuvchi1: 'R', sotuvchi2: 'R', assistent: 'A', jamoa: '—' } },
@@ -102,8 +102,8 @@ export const RACI_MATRIX: { activity: string; pre: Record<Assignee, string>; sem
 export const TEAM_PROFILES: TeamProfile[] = [
   {
     id: 'mentor',
-    name: 'Mentor',
-    roleUz: 'Zapusk rahbari · Spiker · Strateg',
+    name: 'Producer',
+    roleUz: 'Project Lead · Presenter · Strateg',
     roleEn: 'Lead & Presenter',
     reportsTo: 'ceo',
     manages: ['assistent', 'targetolog', 'sotuvchi1', 'sotuvchi2'],
@@ -161,9 +161,9 @@ export const TEAM_PROFILES: TeamProfile[] = [
   },
   {
     id: 'assistent',
-    name: 'Assistent',
-    roleUz: 'Operatsiya menejeri · Logistika · CRM',
-    roleEn: 'Operations',
+    name: 'Ops Manager',
+    roleUz: 'Ops Manager · Logistika · CRM',
+    roleEn: 'Operations Manager',
     reportsTo: 'mentor',
     manages: [],
     phone: '+998 __ ___ __ __',
@@ -217,9 +217,9 @@ export const TEAM_PROFILES: TeamProfile[] = [
   },
   {
     id: 'targetolog',
-    name: 'Targetolog',
-    roleUz: 'Marketing · Meta Ads · SMM',
-    roleEn: 'Ads & Analytics',
+    name: 'Traffic Manager',
+    roleUz: 'Paid Traffic · Meta Ads · Performance Marketing',
+    roleEn: 'Traffic & Performance',
     reportsTo: 'mentor',
     manages: [],
     phone: '+998 __ ___ __ __',
@@ -271,9 +271,9 @@ export const TEAM_PROFILES: TeamProfile[] = [
   },
   {
     id: 'sotuvchi1',
-    name: 'Sotuvchi 1',
-    roleUz: 'Front Sales · Kirish · A-segment',
-    roleEn: 'Sales Manager (Front)',
+    name: 'Sales Closer 1',
+    roleUz: 'Front Sales · Kirish · A-segment Closer',
+    roleEn: 'Sales Manager / Closer (Front)',
     reportsTo: 'mentor',
     manages: [],
     phone: '+998 __ ___ __ __',
@@ -321,9 +321,9 @@ export const TEAM_PROFILES: TeamProfile[] = [
   },
   {
     id: 'sotuvchi2',
-    name: 'Sotuvchi 2',
-    roleUz: 'Floor Sales · Zal · B-segment · Dojim',
-    roleEn: 'Sales Manager (Floor)',
+    name: 'Sales Closer 2',
+    roleUz: 'Floor Sales · Zal · B-segment · Follow-up',
+    roleEn: 'Sales Manager / Closer (Floor)',
     reportsTo: 'mentor',
     manages: [],
     phone: '+998 __ ___ __ __',
