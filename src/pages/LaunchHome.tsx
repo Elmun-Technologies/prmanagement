@@ -19,11 +19,33 @@ export default function LaunchHome() {
         <p className="text-gray-400 mt-2 max-w-2xl">
           Marketing jamoasi uchun bosqichma-bosqich zapusk. Har bir bosqich oldingisi 100% bo&apos;lgach ochiladi.
         </p>
-        <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-500">
-          <span>T{currentDay >= 0 ? '+' : ''}{currentDay}</span>
-          <span>{totalXP.toLocaleString()} XP</span>
-          <span>{streak} kun streak</span>
-          <span>{overallProgress}% umumiy</span>
+        <div className="flex flex-wrap gap-3 mt-4">
+          <span className="flex items-center gap-1.5 text-xs bg-dark-surface border border-dark-border rounded-lg px-3 py-1.5">
+            <span>📅</span>
+            <span className="text-gray-400">
+              {currentDay === 0
+                ? 'Bugun seminar kuni!'
+                : currentDay < 0
+                ? `Seminargacha ${Math.abs(currentDay)} kun qoldi`
+                : `Seminardan ${currentDay} kun o'tdi`}
+            </span>
+            <span className="text-white font-bold ml-1">(T{currentDay >= 0 ? '+' : ''}{currentDay})</span>
+          </span>
+          <span className="flex items-center gap-1.5 text-xs bg-dark-surface border border-dark-border rounded-lg px-3 py-1.5">
+            <span>⚡</span>
+            <span className="text-gray-400">Mukofot balli:</span>
+            <span className="text-gold font-bold">{totalXP.toLocaleString()} XP</span>
+          </span>
+          <span className="flex items-center gap-1.5 text-xs bg-dark-surface border border-dark-border rounded-lg px-3 py-1.5">
+            <span>🔥</span>
+            <span className="text-gray-400">Ketma-ket ish:</span>
+            <span className="text-orange-400 font-bold">{streak} kun</span>
+          </span>
+          <span className="flex items-center gap-1.5 text-xs bg-dark-surface border border-dark-border rounded-lg px-3 py-1.5">
+            <span>📊</span>
+            <span className="text-gray-400">Umumiy progress:</span>
+            <span className="text-green-400 font-bold">{overallProgress}%</span>
+          </span>
         </div>
         <div className="mt-4 max-w-md">
           <ProgressBar value={overallProgress} color="bg-gold" height="h-2" />

@@ -45,19 +45,69 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <div className="px-4 py-2 border-b border-dark-border flex gap-2 text-xs">
-        <div className="flex-1 bg-dark-surface rounded-lg py-1.5 text-center">
-          <p className="text-gold font-bold">{totalXP}</p>
-          <p className="text-gray-500">XP</p>
+      {/* 3 mini stat box */}
+      <div className="px-3 py-2 border-b border-dark-border space-y-1.5">
+        {/* XP Ball */}
+        <div className="flex items-center justify-between bg-dark-surface rounded-lg px-3 py-1.5">
+          <div className="flex items-center gap-1.5">
+            <span className="text-base">⚡</span>
+            <div>
+              <p className="text-[10px] text-gray-500 leading-none">Mukofot balli</p>
+              <p className="text-[10px] text-gray-600 leading-none">(task bajarganda olinadi)</p>
+            </div>
+          </div>
+          <p className="text-gold font-black text-sm">{totalXP.toLocaleString()} XP</p>
         </div>
-        <div className="flex-1 bg-dark-surface rounded-lg py-1.5 text-center">
-          <p className="text-orange-400 font-bold">{streak}</p>
-          <p className="text-gray-500">Streak</p>
+
+        {/* Ketma-ket kunlar */}
+        <div className="flex items-center justify-between bg-dark-surface rounded-lg px-3 py-1.5">
+          <div className="flex items-center gap-1.5">
+            <span className="text-base">🔥</span>
+            <div>
+              <p className="text-[10px] text-gray-500 leading-none">Ketma-ket ish kuni</p>
+              <p className="text-[10px] text-gray-600 leading-none">(uzilmay ishlash)</p>
+            </div>
+          </div>
+          <p className="text-orange-400 font-black text-sm">{streak} kun</p>
         </div>
-        <div className="flex-1 bg-dark-surface rounded-lg py-1.5 flex items-center justify-center gap-1">
-          <button onClick={() => setCurrentDay(Math.max(-30, currentDay - 1))} className="text-gray-500 hover:text-white">←</button>
-          <span className="text-white font-bold">T{currentDay >= 0 ? '+' : ''}{currentDay}</span>
-          <button onClick={() => setCurrentDay(Math.min(7, currentDay + 1))} className="text-gray-500 hover:text-white">→</button>
+
+        {/* Seminar kuniga nisbatan kun */}
+        <div className="bg-dark-surface rounded-lg px-3 py-1.5">
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-1.5">
+              <span className="text-base">📅</span>
+              <div>
+                <p className="text-[10px] text-gray-500 leading-none">Seminar kuniga nisbatan</p>
+                <p className="text-[10px] text-gray-600 leading-none">
+                  {currentDay === 0
+                    ? 'Bugun — seminar kuni!'
+                    : currentDay < 0
+                    ? `Seminargacha ${Math.abs(currentDay)} kun`
+                    : `Seminardan ${currentDay} kun o'tdi`}
+                </p>
+              </div>
+            </div>
+            <p className="text-white font-black text-sm">
+              T{currentDay >= 0 ? '+' : ''}{currentDay}
+            </p>
+          </div>
+          <div className="flex items-center justify-center gap-3 mt-1">
+            <button
+              type="button"
+              onClick={() => setCurrentDay(Math.max(-30, currentDay - 1))}
+              className="text-gray-400 hover:text-white text-xs px-2 py-0.5 rounded bg-dark-hover hover:bg-dark-border transition-colors"
+            >
+              ← Oldingi
+            </button>
+            <span className="text-[10px] text-gray-600">kun</span>
+            <button
+              type="button"
+              onClick={() => setCurrentDay(Math.min(21, currentDay + 1))}
+              className="text-gray-400 hover:text-white text-xs px-2 py-0.5 rounded bg-dark-hover hover:bg-dark-border transition-colors"
+            >
+              Keyingi →
+            </button>
+          </div>
         </div>
       </div>
 
@@ -155,8 +205,16 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="px-4 py-3 border-t border-dark-border text-center">
-        <p className="text-[10px] text-gray-600">Bo&apos;lim → Bo&apos;limcha → Ishlar</p>
+      <div className="px-4 py-3 border-t border-dark-border">
+        <p className="text-[10px] text-gray-600 text-center mb-1">Ketma-ket tizim:</p>
+        <div className="flex items-center justify-center gap-1 text-[10px]">
+          <span className="text-blue-400">📦 Modul</span>
+          <span className="text-gray-600">→</span>
+          <span className="text-purple-400">📋 Bo&apos;limcha</span>
+          <span className="text-gray-600">→</span>
+          <span className="text-green-400">✅ Ishlar</span>
+        </div>
+        <p className="text-[9px] text-gray-700 text-center mt-1">Oldingi 100% bo&apos;lsa keyingisi ochiladi</p>
       </div>
     </aside>
   );

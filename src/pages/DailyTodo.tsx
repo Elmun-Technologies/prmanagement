@@ -52,7 +52,14 @@ export default function DailyTodo() {
         <div>
           <h1 className="text-2xl font-bold text-white">Kunlik Tasklar</h1>
           <p className={`text-sm mt-1 font-medium ${phaseForDay.color}`}>
-            {phaseForDay.emoji} {phaseForDay.name} — T{currentDay >= 0 ? '+' : ''}{currentDay}
+            {phaseForDay.emoji} {phaseForDay.name}
+          </p>
+          <p className="text-xs text-gray-500 mt-0.5">
+            {currentDay === 0
+              ? '📅 Bugun — seminar kuni'
+              : currentDay < 0
+              ? `📅 Seminargacha ${Math.abs(currentDay)} kun qoldi`
+              : `📅 Seminardan keyin ${currentDay}-kun`}
           </p>
         </div>
         <div className="text-right">
@@ -63,7 +70,14 @@ export default function DailyTodo() {
 
       {/* Day navigator */}
       <div className="card">
-        <p className="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">Kun tanlash</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Kun tanlash</p>
+          <p className="text-xs text-gray-600">
+            <span className="text-amber-400 font-bold">T0</span> = seminar kuni ·
+            <span className="text-red-400 font-bold"> T-N</span> = oldin ·
+            <span className="text-green-400 font-bold"> T+N</span> = keyin
+          </p>
+        </div>
         <div className="flex flex-wrap gap-1">
           {DAY_RANGE.map((day) => {
             const dayTs = tasks.filter((t) => t.day === day);
