@@ -2,6 +2,15 @@ export type TaskStatus = 'pending' | 'inprogress' | 'done';
 export type Assignee = 'mentor' | 'targetolog' | 'sotuvchi1' | 'sotuvchi2' | 'assistent' | 'jamoa';
 export type PhaseColor = 'phase1' | 'phase2' | 'phase3' | 'phase4' | 'phase5';
 export type LaunchStage = 'pre-seminar' | 'seminar' | 'main-course';
+export type ResourceType = 'sheets' | 'forms' | 'docs' | 'slides' | 'drive' | 'link';
+
+export interface TaskResource {
+  type: ResourceType;
+  label: string;       // "Mijozlar jadvali"
+  url: string;         // Google Drive / Forms URL
+  hint: string;        // "Yuklab oling, to'ldiring, qayta yuboring"
+  required: boolean;   // Taskni bajarish uchun majburiy
+}
 
 export interface LaunchStageInfo {
   id: LaunchStage;

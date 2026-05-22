@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Task, TeamMember, Badge, KPI, LaunchState, LaunchStage } from '../data/types';
+import type { Task, TeamMember, Badge, KPI, LaunchState, LaunchStage, TaskResource } from '../data/types';
 import {
   PHASES,
   LAUNCH_STAGES,
@@ -19,6 +19,10 @@ interface XPPopup {
 
 interface LaunchStore extends LaunchState {
   xpPopups: XPPopup[];
+  // taskId -> resources (admin belgilagan shablonlar)
+  taskResourceLinks: Record<string, TaskResource[]>;
+  // taskId -> completed work URL (jamoa a'zolari joylashgan natijalar)
+  taskResultLinks: Record<string, string>;
 
   // Actions
   completeTask: (taskId: string, assignee?: string) => void;
@@ -30,6 +34,11 @@ interface LaunchStore extends LaunchState {
   setCurrentDay: (day: number) => void;
   dismissXPPopup: (id: string) => void;
   resetAll: () => void;
+  setTaskResources: (taskId: string, resources: TaskResource[]) => void;
+  addTaskResource: (taskId: string, resource: TaskResource) => void;
+  removeTaskResource: (taskId: string, index: number) => void;
+  setTaskResultLink: (taskId: string, url: string) => void;
+  clearTaskResultLink: (taskId: string) => void;
 
   // Computed helpers
   getPhaseProgress: (phaseId: number) => number;
@@ -63,6 +72,9 @@ const INITIAL_STATE: LaunchState = {
   currentDay: -30,
   lastActiveDate: '',
 };
+
+const INITIAL_RESOURCE_LINKS: Record<string, TaskResource[]> = {};
+const INITIAL_RESULT_LINKS: Record<string, string> = {};
 
 function checkAndAwardBadges(
   badges: Badge[],
@@ -134,6 +146,8 @@ export const useLaunchStore = create<LaunchStore>()(
     (set, get) => ({
       ...INITIAL_STATE,
       xpPopups: [],
+      taskResourceLinks: INITIAL_RESOURCE_LINKS,
+      taskResultLinks: INITIAL_RESULT_LINKS,
 
       completeTask: (taskId, assigneeOverride) => {
         const state = get();
@@ -236,7 +250,39 @@ export const useLaunchStore = create<LaunchStore>()(
         }));
       },
 
-      resetAll: () => set({ ...INITIAL_STATE, xpPopups: [] }),
+      resetAll: () => set({ ...INITIAL_STATE, xpPopups: [], taskResourceLinks: {}, taskResultLinks: {} }),
+
+      setTaskResources: (taskId, resources) =>
+        set((state) => ({
+          taskResourceLinks: { ...state.taskResourceLinks, [taskId]: resources },
+        })),
+
+      addTaskResource: (taskId, resource) =>
+        set((state) => ({
+          taskResourceLinks: {
+            ...state.taskResourceLinks,
+            [taskId]: [...(state.taskResourceLinks[taskId] || []), resource],
+          },
+        })),
+
+      removeTaskResource: (taskId, index) =>
+        set((state) => ({
+          taskResourceLinks: {
+            ...state.taskResourceLinks,
+            [taskId]: (state.taskResourceLinks[taskId] || []).filter((_, i) => i !== index),
+          },
+        })),
+
+      setTaskResultLink: (taskId, url) =>
+        set((state) => ({
+          taskResultLinks: { ...state.taskResultLinks, [taskId]: url },
+        })),
+
+      clearTaskResultLink: (taskId) =>
+        set((state) => {
+          const { [taskId]: _, ...rest } = state.taskResultLinks;
+          return { taskResultLinks: rest };
+        }),
 
       getPhaseProgress: (phaseId) => {
         const tasks = get().tasks.filter((t) => t.phaseId === phaseId);
@@ -336,6 +382,8 @@ export const useLaunchStore = create<LaunchStore>()(
         badges: state.badges,
         currentDay: state.currentDay,
         lastActiveDate: state.lastActiveDate,
+        taskResourceLinks: state.taskResourceLinks,
+        taskResultLinks: state.taskResultLinks,
       }),
     }
   )
