@@ -132,7 +132,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
                 ‹
               </button>
               <span className={`text-xs font-bold ${currentDay === 0 ? 'text-red-400' : 'text-white'}`}>
-                T{currentDay >= 0 ? '+' : ''}{currentDay}
+                {currentDay === 0 ? 'Seminar!' : currentDay < 0 ? `${Math.abs(currentDay)} kun` : `+${currentDay} kun`}
               </span>
               <button
                 type="button"

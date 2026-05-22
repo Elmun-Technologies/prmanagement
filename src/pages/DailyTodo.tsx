@@ -5,13 +5,13 @@ import ProgressBar from '../components/ProgressBar';
 import type { Assignee } from '../data/types';
 
 const ASSIGNEE_OPTIONS: { id: Assignee | 'all'; label: string; emoji: string }[] = [
-  { id: 'all', label: 'Hammasi', emoji: '👥' },
-  { id: 'mentor', label: 'Mentor', emoji: '🎤' },
-  { id: 'targetolog', label: 'Targetolog', emoji: '📈' },
-  { id: 'sotuvchi1', label: 'Sotuvchi 1', emoji: '💼' },
-  { id: 'sotuvchi2', label: 'Sotuvchi 2', emoji: '💼' },
-  { id: 'assistent', label: 'Assistent', emoji: '📋' },
-  { id: 'jamoa', label: 'Jamoa', emoji: '🤝' },
+  { id: 'all',        label: 'Hammasi',        emoji: '👥' },
+  { id: 'mentor',     label: 'Producer',       emoji: '👑' },
+  { id: 'targetolog', label: 'Traffic Mgr',    emoji: '🎯' },
+  { id: 'sotuvchi1',  label: 'Sales Closer 1', emoji: '💼' },
+  { id: 'sotuvchi2',  label: 'Sales Closer 2', emoji: '💼' },
+  { id: 'assistent',  label: 'Ops Manager',    emoji: '🤝' },
+  { id: 'jamoa',      label: 'Jamoa',          emoji: '👥' },
 ];
 
 const DAY_RANGE = Array.from({ length: 52 }, (_, i) => i - 30);
@@ -38,12 +38,25 @@ export default function DailyTodo() {
   const progress = dayTasks.length > 0 ? Math.round((done / dayTasks.length) * 100) : 0;
 
   const phaseForDay = useMemo(() => {
-    if (currentDay <= -21) return { name: 'Poydevor', emoji: '🏗️', color: 'text-blue-400' };
-    if (currentDay <= -11) return { name: 'Mashina', emoji: '⚙️', color: 'text-purple-400' };
-    if (currentDay <= -1)  return { name: 'Isitish', emoji: '🔥', color: 'text-amber-400' };
+    if (currentDay <= -21) return { name: 'Tayyorgarlik', emoji: '🏗️', color: 'text-blue-400' };
+    if (currentDay <= -11) return { name: 'Trafik Tizimi', emoji: '⚙️', color: 'text-purple-400' };
+    if (currentDay <= -1)  return { name: 'Progrev', emoji: '🔥', color: 'text-amber-400' };
     if (currentDay === 0)  return { name: 'Seminar Kuni', emoji: '🎯', color: 'text-green-400' };
     return { name: 'Asosiy Kurs', emoji: '🚀', color: 'text-indigo-400' };
   }, [currentDay]);
+
+  // Human-readable day label
+  function dayLabel(day: number): string {
+    if (day === 0) return 'Seminar kuni';
+    if (day < 0)  return `${Math.abs(day)} kun oldin`;
+    return `${day} kun keyin`;
+  }
+
+  // Group days into sections for cleaner display
+  const daysWithTasks = DAY_RANGE.filter((d) => tasks.some((t) => t.day === d));
+  const preSeminarDays = daysWithTasks.filter((d) => d < 0).reverse(); // newest first
+  const seminarDay     = daysWithTasks.filter((d) => d === 0);
+  const postDays       = daysWithTasks.filter((d) => d > 0);
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-5">
@@ -56,10 +69,10 @@ export default function DailyTodo() {
           </p>
           <p className="text-xs text-gray-500 mt-0.5">
             {currentDay === 0
-              ? '📅 Bugun — seminar kuni'
+              ? '📅 Bugun — seminar kuni!'
               : currentDay < 0
               ? `📅 Seminargacha ${Math.abs(currentDay)} kun qoldi`
-              : `📅 Seminardan keyin ${currentDay}-kun`}
+              : `📅 Seminardan keyin ${currentDay} kun o'tdi`}
           </p>
         </div>
         <div className="text-right">
@@ -69,43 +82,106 @@ export default function DailyTodo() {
       </div>
 
       {/* Day navigator */}
-      <div className="card">
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Kun tanlash</p>
-          <p className="text-xs text-gray-600">
-            <span className="text-amber-400 font-bold">T0</span> = seminar kuni ·
-            <span className="text-red-400 font-bold"> T-N</span> = oldin ·
-            <span className="text-green-400 font-bold"> T+N</span> = keyin
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-1">
-          {DAY_RANGE.map((day) => {
-            const dayTs = tasks.filter((t) => t.day === day);
-            const hasTasks = dayTs.length > 0;
-            const allDone = hasTasks && dayTs.every((t) => t.status === 'done');
-            const isToday = day === currentDay;
-            return (
-              <button
-                key={day}
-                type="button"
-                onClick={() => setCurrentDay(day)}
-                disabled={!hasTasks}
-                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
-                  isToday
-                    ? 'bg-gold text-dark-bg font-bold'
-                    : allDone
-                    ? 'bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30'
-                    : hasTasks
-                    ? 'bg-dark-surface text-gray-300 border border-dark-border hover:border-gold/40 hover:text-gold'
-                    : 'bg-dark-bg text-gray-600 cursor-not-allowed'
-                }`}
-              >
-                T{day >= 0 ? '+' : ''}{day}
-                {allDone && <span className="ml-0.5 text-green-400">✓</span>}
-              </button>
-            );
-          })}
-        </div>
+      <div className="card space-y-3">
+        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Kun tanlash</p>
+
+        {/* Seminargacha */}
+        {preSeminarDays.length > 0 && (
+          <div>
+            <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wider mb-1.5 flex items-center gap-1">
+              🏗️ Seminargacha
+            </p>
+            <div className="flex flex-wrap gap-1">
+              {preSeminarDays.map((day) => {
+                const dayTs = tasks.filter((t) => t.day === day);
+                const allDone = dayTs.every((t) => t.status === 'done');
+                const isActive = day === currentDay;
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    onClick={() => setCurrentDay(day)}
+                    title={dayLabel(day)}
+                    className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                      isActive
+                        ? 'bg-gold text-dark-bg font-bold'
+                        : allDone
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                        : 'bg-dark-surface text-gray-300 border border-dark-border hover:border-gold/40 hover:text-gold'
+                    }`}
+                  >
+                    {Math.abs(day)} kun oldin
+                    {allDone && ' ✓'}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Seminar kuni */}
+        {seminarDay.length > 0 && (
+          <div>
+            <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wider mb-1.5">
+              🎯 Seminar kuni
+            </p>
+            {seminarDay.map((day) => {
+              const dayTs = tasks.filter((t) => t.day === day);
+              const allDone = dayTs.every((t) => t.status === 'done');
+              const isActive = day === currentDay;
+              return (
+                <button
+                  key={day}
+                  type="button"
+                  onClick={() => setCurrentDay(day)}
+                  className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${
+                    isActive
+                      ? 'bg-gold text-dark-bg'
+                      : allDone
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                      : 'bg-red-500/20 text-red-300 border border-red-500/30 hover:border-red-400'
+                  }`}
+                >
+                  🎯 Seminar kuni{allDone && ' ✓'}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Seminardan keyin */}
+        {postDays.length > 0 && (
+          <div>
+            <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wider mb-1.5">
+              🚀 Seminardan keyin
+            </p>
+            <div className="flex flex-wrap gap-1">
+              {postDays.map((day) => {
+                const dayTs = tasks.filter((t) => t.day === day);
+                const allDone = dayTs.every((t) => t.status === 'done');
+                const isActive = day === currentDay;
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    onClick={() => setCurrentDay(day)}
+                    title={dayLabel(day)}
+                    className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                      isActive
+                        ? 'bg-gold text-dark-bg font-bold'
+                        : allDone
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                        : 'bg-dark-surface text-gray-300 border border-dark-border hover:border-gold/40 hover:text-gold'
+                    }`}
+                  >
+                    {day} kun keyin
+                    {allDone && ' ✓'}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Stats */}

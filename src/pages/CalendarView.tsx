@@ -15,9 +15,9 @@ const ASSIGNEE_COLORS: Record<string, string> = {
 };
 
 function dayLabel(day: number): string {
-  if (day === 0) return 'T0 — Seminar kuni';
-  if (day < 0) return `T${day} — Seminargacha ${Math.abs(day)} kun`;
-  return `T+${day} — Seminardan ${day} kun keyin`;
+  if (day === 0) return 'Seminar kuni 🎯';
+  if (day < 0)   return `Seminargacha ${Math.abs(day)} kun`;
+  return `Seminardan ${day} kun keyin`;
 }
 
 function DayColumn({ day, tasks, isToday, onClick }: {
@@ -42,7 +42,7 @@ function DayColumn({ day, tasks, isToday, onClick }: {
       }`}
     >
       <p className={`text-xs font-bold ${isToday ? 'text-gold' : day === 0 ? 'text-red-400' : 'text-gray-400'}`}>
-        {day === 0 ? 'T0' : day > 0 ? `T+${day}` : `T${day}`}
+        {day === 0 ? 'Seminar' : day > 0 ? `+${day}k` : `${Math.abs(day)}k`}
       </p>
       <div className="mt-1.5 space-y-0.5 min-h-[60px]">
         {tasks.slice(0, 4).map((t) => (
@@ -81,11 +81,11 @@ export default function CalendarView() {
 
   // Phases as ranges for color coding
   const dayRanges = [
-    { label: 'Bozor & Infra', from: -30, to: -21, color: 'bg-blue-500/10 border-blue-500/20' },
-    { label: 'Marketing',     from: -20, to: -11, color: 'bg-purple-500/10 border-purple-500/20' },
-    { label: 'Progrev',       from: -10, to: -1,  color: 'bg-orange-500/10 border-orange-500/20' },
-    { label: 'Seminar',       from:   0, to:   1,  color: 'bg-red-500/10 border-red-500/20' },
-    { label: 'Asosiy Kurs',   from:   1, to:  28,  color: 'bg-green-500/10 border-green-500/20' },
+    { label: 'Tayyorgarlik (CustDev & Offer)', from: -30, to: -21, color: 'bg-blue-500/10 border-blue-500/20' },
+    { label: 'Trafik Tizimi',                  from: -20, to: -11, color: 'bg-purple-500/10 border-purple-500/20' },
+    { label: 'Progrev',                        from: -10, to: -1,  color: 'bg-orange-500/10 border-orange-500/20' },
+    { label: 'Seminar Kuni',                   from:   0, to:   0, color: 'bg-red-500/10 border-red-500/20' },
+    { label: 'Asosiy Kurs',                    from:   1, to:  28, color: 'bg-green-500/10 border-green-500/20' },
   ];
 
   function getDayRange(day: number) {
@@ -113,7 +113,7 @@ export default function CalendarView() {
             onClick={() => setSelectedDay(currentDay)}
             className="text-xs btn-gold py-1.5 px-3"
           >
-            📅 Bugun (T{currentDay >= 0 ? '+' : ''}{currentDay})
+            📅 {currentDay === 0 ? 'Seminar kuni' : currentDay < 0 ? `${Math.abs(currentDay)} kun oldin` : `${currentDay} kun keyin`}
           </button>
         </div>
       </div>
