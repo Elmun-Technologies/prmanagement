@@ -58,4 +58,7 @@ cat > dist/index.html << 'EOF'
 </html>
 EOF
 
+# Netlify React Router uchun
+echo "/*  /index.html  200" > dist/_redirects
+
 echo "✅ Build tayyor: dist/bundle.js + dist/index.html"
